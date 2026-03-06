@@ -1,7 +1,7 @@
 # WorldGuard Configuration
 op-permissions: false
 build-permission-nodes:
-  enable: true
+  enable: false
   deny-message: '&cYou cannot build in the lobby!'
 regions:
   use-paper-entity-origin: true

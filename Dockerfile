@@ -86,11 +86,11 @@ RUN VIAR_URL=$(curl -s "https://api.github.com/repos/ViaVersion/ViaRewind/releas
     echo "ViaRewind downloaded"
 
 # SkinsRestorer - show skins in offline-mode server
-RUN SR_URL=$(curl -s "https://api.github.com/repos/SkinsRestorer/SkinsRestorerX/releases/latest" | jq -r '[.assets[] | select(.name | endswith(".jar"))][0].browser_download_url') && \
+RUN SR_URL=$(curl -s "https://api.github.com/repos/SkinsRestorer/SkinsRestorer/releases/latest" | jq -r '.assets[] | select(.name == "SkinsRestorer.jar") | .browser_download_url') && \
     if [ -n "$SR_URL" ] && [ "$SR_URL" != "null" ]; then \
         curl -L -o plugins/SkinsRestorer.jar "$SR_URL"; \
     else \
-        curl -L -o plugins/SkinsRestorer.jar "https://github.com/SkinsRestorer/SkinsRestorerX/releases/latest/download/SkinsRestorer.jar"; \
+        curl -L -o plugins/SkinsRestorer.jar "https://github.com/SkinsRestorer/SkinsRestorer/releases/latest/download/SkinsRestorer.jar"; \
     fi && \
     echo "SkinsRestorer downloaded"
 

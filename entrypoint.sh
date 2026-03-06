@@ -130,27 +130,21 @@ fi
 echo "[FileBrowser] Starting web file manager on port ${FILEBROWSER_PORT}..."
 mkdir -p "${FILEBROWSER_DIR}"
 
-# Create filebrowser config if it doesn't exist
-if [ ! -f "${FILEBROWSER_DIR}/filebrowser.db" ]; then
-    echo "[FileBrowser] First run - creating admin account..."
-    filebrowser config init --database "${FILEBROWSER_DIR}/filebrowser.db" 2>/dev/null || true
-    filebrowser config set \
-        --database "${FILEBROWSER_DIR}/filebrowser.db" \
-        --address "0.0.0.0" \
-        --port "${FILEBROWSER_PORT}" \
-        --root "${VOLUME_DIR}" \
-        --auth.method=json \
-        --branding.name="BedWars Server Files" 2>/dev/null || true
-    filebrowser users add admin adminadmin123 \
-        --database "${FILEBROWSER_DIR}/filebrowser.db" \
-        --perm.admin 2>/dev/null || true
-    echo "[FileBrowser] Admin account created (user: admin, pass: adminadmin123)"
-else
-    # Force update password on existing DB
-    filebrowser users update admin --password adminadmin123 \
-        --database "${FILEBROWSER_DIR}/filebrowser.db" 2>/dev/null || true
-    echo "[FileBrowser] Admin password updated"
-fi
+# Always recreate filebrowser DB to ensure correct credentials
+rm -f "${FILEBROWSER_DIR}/filebrowser.db"
+echo "[FileBrowser] Creating fresh admin account..."
+filebrowser config init --database "${FILEBROWSER_DIR}/filebrowser.db" 2>/dev/null || true
+filebrowser config set \
+    --database "${FILEBROWSER_DIR}/filebrowser.db" \
+    --address "0.0.0.0" \
+    --port "${FILEBROWSER_PORT}" \
+    --root "${VOLUME_DIR}" \
+    --auth.method=json \
+    --branding.name="BedWars Server Files" 2>/dev/null || true
+filebrowser users add admin adminadmin123 \
+    --database "${FILEBROWSER_DIR}/filebrowser.db" \
+    --perm.admin 2>/dev/null || true
+echo "[FileBrowser] Admin account created (user: admin, pass: adminadmin123)"
 
 filebrowser \
     --database "${FILEBROWSER_DIR}/filebrowser.db" \

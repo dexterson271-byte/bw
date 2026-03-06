@@ -55,6 +55,10 @@ fi
 echo "[AutoConfig] Setting lobby gamerules..."
 echo "gamerule doImmediateRespawn true" > /data/server/server_input
 sleep 0.5
+echo "gamerule keepInventory true" > /data/server/server_input
+sleep 0.5
+echo "time set day" > /data/server/server_input
+sleep 0.5
 echo "gamerule doDaylightCycle false" > /data/server/server_input
 sleep 0.5
 echo "gamerule doWeatherCycle false" > /data/server/server_input

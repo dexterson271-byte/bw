@@ -65,7 +65,6 @@ misc:
     chat-executor-max-size: -1
   fix-entity-position-desync: true
   lag-compensate-block-breaking: true
-  lag-compensate-block-placement: true
   load-permissions-yml-before-plugins: true
   max-joins-per-tick: 3
   region-file-cache-size: 256

@@ -53,13 +53,12 @@ RUN AUTH_URL=$(curl -s "https://api.github.com/repos/AuthMe/AuthMeReloaded/relea
     fi && \
     echo "AuthMe downloaded"
 
-# FastLogin - auto-login for premium players  
-RUN FAST_URL=$(curl -s "https://api.github.com/repos/games647/FastLogin/releases/latest" | jq -r '.assets[] | select(.name | contains("bukkit") or contains("Bukkit")) | .browser_download_url' | head -1) && \
+# FastLogin - auto-login for premium players (TuxCoding fork)
+RUN FAST_URL=$(curl -s "https://api.github.com/repos/TuxCoding/FastLogin/releases/latest" | jq -r '.assets[] | select(.name == "FastLoginBukkit.jar") | .browser_download_url') && \
     if [ -n "$FAST_URL" ] && [ "$FAST_URL" != "null" ]; then \
         curl -L -o plugins/FastLogin.jar "$FAST_URL"; \
     else \
-        FAST_URL=$(curl -s "https://api.github.com/repos/games647/FastLogin/releases/latest" | jq -r '.assets[0].browser_download_url') && \
-        curl -L -o plugins/FastLogin.jar "$FAST_URL"; \
+        curl -L -o plugins/FastLogin.jar "https://github.com/TuxCoding/FastLogin/releases/download/1.12-kick-toggle/FastLoginBukkit.jar"; \
     fi && \
     echo "FastLogin downloaded"
 

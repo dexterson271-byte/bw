@@ -41,6 +41,18 @@ else
     # Remove old Screaming BedWars plugin (replaced by BedWars1058)
     rm -f "${SERVER_DIR}/plugins/BedWars-"*.jar 2>/dev/null || true
     rm -f "${SERVER_DIR}/plugins/BedWars1058-"*.jar 2>/dev/null || true
+    # Remove corrupt/empty JARs from volume before copying new ones
+    echo "[Init] Validating existing plugin JARs on volume..."
+    for jar in "${SERVER_DIR}/plugins/"*.jar; do
+        [ -f "$jar" ] || continue
+        if [ ! -s "$jar" ]; then
+            echo "[Init] Removing empty JAR: $(basename "$jar")"
+            rm -f "$jar"
+        elif ! jar tf "$jar" > /dev/null 2>&1; then
+            echo "[Init] Removing corrupt JAR: $(basename "$jar")"
+            rm -f "$jar"
+        fi
+    done
     # Force update all plugins from image
     echo "[Init] Updating plugins from image..."
     cp -f /server/plugins/*.jar "${SERVER_DIR}/plugins/" 2>/dev/null || true

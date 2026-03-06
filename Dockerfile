@@ -139,14 +139,24 @@ RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/re
     echo "VaultChatFormatter downloaded"
 
 # Citizens - NPC plugin for BedWars1058 join NPCs
-RUN curl -L -o plugins/Citizens.jar \
-    "https://ci.citizensnpcs.co/job/Citizens2/lastSuccessfulBuild/artifact/dist/target/Citizens-2.0.37-b3662.jar" && \
-    if [ ! -s plugins/Citizens.jar ]; then \
-        echo "Primary Citizens URL failed, trying Maven repo..." && \
-        curl -L -o plugins/Citizens.jar "https://repo.citizensnpcs.co/net/citizensnpcs/citizens-main/2.0.35/citizens-main-2.0.35.jar"; \
+# Download from GitHub releases (most reliable)
+RUN CITIZENS_URL=$(curl -s "https://api.github.com/repos/CitizensDev/Citizens2/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
+    if [ -n "$CITIZENS_URL" ] && [ "$CITIZENS_URL" != "null" ]; then \
+        curl -L -o plugins/Citizens.jar "$CITIZENS_URL"; \
+    else \
+        curl -L -o plugins/Citizens.jar "https://github.com/CitizensDev/Citizens2/releases/download/2.0.35-b3546/Citizens-2.0.35-b3546.jar"; \
     fi && \
     ls -la plugins/Citizens.jar && \
     echo "Citizens downloaded"
+
+# Validate all plugin JARs (remove corrupt/empty ones)
+RUN for jar in plugins/*.jar; do \
+        if [ ! -s "$jar" ]; then \
+            echo "WARNING: Empty JAR detected, removing: $jar" && rm -f "$jar"; \
+        elif ! jar tf "$jar" > /dev/null 2>&1; then \
+            echo "WARNING: Corrupt JAR detected, removing: $jar" && rm -f "$jar"; \
+        fi; \
+    done && echo "All plugin JARs validated"
 
 RUN echo "eula=true" > eula.txt
 

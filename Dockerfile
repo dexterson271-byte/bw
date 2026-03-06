@@ -9,7 +9,12 @@
 FROM maven:3.9-eclipse-temurin-17 AS bedwars-builder
 WORKDIR /build
 COPY BedWars1058-src/ .
-RUN mvn clean package -DskipTests -q
+RUN mvn clean package -DskipTests -q \
+    -Dmaven.wagon.http.retryHandler.count=5 \
+    -Dmaven.wagon.httpconnectionManager.ttlSeconds=30 \
+    -Dmaven.resolver.transport=wagon || \
+    (echo "Retry after 10s..." && sleep 10 && mvn clean package -DskipTests -q \
+    -Dmaven.wagon.http.retryHandler.count=5)
 
 # Stage 2: Get JRE
 FROM eclipse-temurin:21-jre-alpine AS jre

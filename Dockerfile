@@ -85,10 +85,19 @@ RUN VIAR_URL=$(curl -s "https://api.github.com/repos/ViaVersion/ViaRewind/releas
     curl -L -o plugins/ViaRewind.jar "$VIAR_URL" && \
     echo "ViaRewind downloaded"
 
+# SkinsRestorer - show skins in offline-mode server
+RUN SR_URL=$(curl -s "https://api.github.com/repos/SkinsRestorer/SkinsRestorerX/releases/latest" | jq -r '[.assets[] | select(.name | endswith(".jar"))][0].browser_download_url') && \
+    if [ -n "$SR_URL" ] && [ "$SR_URL" != "null" ]; then \
+        curl -L -o plugins/SkinsRestorer.jar "$SR_URL"; \
+    else \
+        curl -L -o plugins/SkinsRestorer.jar "https://github.com/SkinsRestorer/SkinsRestorerX/releases/latest/download/SkinsRestorer.jar"; \
+    fi && \
+    echo "SkinsRestorer downloaded"
+
 RUN echo "eula=true" > eula.txt
 
 # Copy all configs
-COPY server.properties spigot.yml eula.txt ./
+COPY server.properties spigot.yml eula.txt ops.json ./
 COPY config/ ./config/
 COPY plugins/ ./plugins/
 

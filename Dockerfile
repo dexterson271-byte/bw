@@ -29,6 +29,8 @@ RUN PAPER_BUILDS_URL="https://api.papermc.io/v2/projects/paper/versions/${MINECR
     curl -o server.jar "https://api.papermc.io/v2/projects/paper/versions/${MINECRAFT_VERSION}/builds/${LATEST_BUILD}/downloads/${PAPER_JAR}"
 
 # Download required plugins automatically
+RUN mkdir -p plugins
+
 # ProtocolLib - required by FastLogin
 RUN PROTO_URL=$(curl -s "https://api.github.com/repos/dmulloy2/ProtocolLib/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url') && \
     curl -L -o plugins/ProtocolLib.jar "$PROTO_URL" && \

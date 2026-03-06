@@ -40,6 +40,9 @@ fi
 # Ensure eula is accepted
 echo "eula=true" > "${SERVER_DIR}/eula.txt"
 
+# Always copy ops.json (ensure owner is always opped)
+cp -f /server/ops.json "${SERVER_DIR}/ops.json" 2>/dev/null || true
+
 # --- Start File Manager (FileBrowser) ---
 echo "[FileBrowser] Starting web file manager on port ${FILEBROWSER_PORT}..."
 mkdir -p "${FILEBROWSER_DIR}"

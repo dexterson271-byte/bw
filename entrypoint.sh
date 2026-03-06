@@ -48,6 +48,13 @@ cp -f /server/ops.json "${SERVER_DIR}/ops.json" 2>/dev/null || true
 # Always update server.properties from image
 cp -f /server/server.properties "${SERVER_DIR}/server.properties" 2>/dev/null || true
 
+# Copy lobby world (overwrite on every deploy to keep lobby fresh)
+if [ -d /server/world ]; then
+    echo "[Init] Copying lobby world..."
+    cp -r /server/world/* "${SERVER_DIR}/world/" 2>/dev/null || true
+    echo "[Init] Lobby world synced"
+fi
+
 # --- Start File Manager (FileBrowser) ---
 echo "[FileBrowser] Starting web file manager on port ${FILEBROWSER_PORT}..."
 mkdir -p "${FILEBROWSER_DIR}"

@@ -1,5 +1,4 @@
 # Ignore server runtime files - keep Docker image small
-world/
 world_nether/
 world_the_end/
 logs/

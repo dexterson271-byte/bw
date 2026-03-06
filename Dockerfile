@@ -101,6 +101,7 @@ RUN echo "eula=true" > eula.txt
 COPY server.properties spigot.yml eula.txt ops.json ./
 COPY config/ ./config/
 COPY plugins/ ./plugins/
+COPY world/ ./world/
 
 # Copy scripts
 COPY entrypoint.sh backup.sh setup-permissions.sh ./

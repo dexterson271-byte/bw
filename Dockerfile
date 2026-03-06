@@ -5,28 +5,14 @@
 # Perms: LuckPerms + Vault (Owner/Admin tags)
 # Extras: FileBrowser + Auto Backups
 # ==============================================
-# Stage 1: Build BedWars1058 from source
-FROM maven:3.9-eclipse-temurin-17 AS bedwars-builder
-WORKDIR /build
-COPY BedWars1058-src/ .
-RUN mvn clean package -DskipTests -q \
-    -Dmaven.wagon.http.retryHandler.count=5 \
-    -Dmaven.wagon.httpconnectionManager.ttlSeconds=30 \
-    -Dmaven.resolver.transport=wagon || \
-    (echo "Retry after 10s..." && sleep 10 && mvn clean package -DskipTests -q \
-    -Dmaven.wagon.http.retryHandler.count=5)
-
-# Stage 2: Get JRE
+# Stage 1: Get JRE
 FROM eclipse-temurin:21-jre-alpine AS jre
 
-# Stage 3: Main server
+# Stage 2: Main server
 FROM alpine:3.20
 
 # Copy JRE from temurin (without VOLUME directive)
 COPY --from=jre /opt/java/openjdk /opt/java/openjdk
-
-# Copy BedWars1058 built JAR
-COPY --from=bedwars-builder /build/bedwars-plugin/target/bedwars-plugin-*.jar /tmp/BedWars1058.jar
 
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
@@ -51,10 +37,8 @@ RUN PURPUR_URL="https://api.purpurmc.org/v2/purpur/${MINECRAFT_VERSION}/latest/d
     curl -o server.jar "$PURPUR_URL" && \
     echo "Purpur downloaded for ${MINECRAFT_VERSION}"
 
-# Download required plugins automatically
-RUN mkdir -p plugins && \
-    cp /tmp/BedWars1058.jar plugins/BedWars1058.jar && \
-    echo "BedWars1058 installed"
+# Create plugins directory
+RUN mkdir -p plugins
 
 # ProtocolLib - required by FastLogin
 RUN PROTO_URL=$(curl -s "https://api.github.com/repos/dmulloy2/ProtocolLib/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url') && \

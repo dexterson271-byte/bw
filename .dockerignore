@@ -15,3 +15,8 @@ bundler/
 .dockerignore
 README.md
 railway.toml
+BedWars1058-25.9.zip
+BedWars1058-extracted/
+maps/4v4v4v4/
+maps/4v4/
+maps/*.zip

@@ -1,16 +1,28 @@
 # ==============================================
 # BedWars Server - Railway Pro Optimized
-# Purpur MC + Screaming BedWars (Hypixel-Style)
+# Purpur MC + BedWars1058 (Hypixel-Style)
 # Auth: AuthMe + FastLogin (cracked + premium)
 # Perms: LuckPerms + Vault (Owner/Admin tags)
 # Extras: FileBrowser + Auto Backups
 # ==============================================
-# Multi-stage build to strip VOLUME from base image (Railway bans VOLUME)
+# Stage 1: Build BedWars1058 from source
+FROM maven:3.9-eclipse-temurin-17 AS bedwars-builder
+WORKDIR /build
+COPY BedWars1058-src/ .
+RUN mvn clean package -DskipTests -q
+
+# Stage 2: Get JRE
 FROM eclipse-temurin:21-jre-alpine AS jre
+
+# Stage 3: Main server
 FROM alpine:3.20
 
 # Copy JRE from temurin (without VOLUME directive)
 COPY --from=jre /opt/java/openjdk /opt/java/openjdk
+
+# Copy BedWars1058 built JAR
+COPY --from=bedwars-builder /build/bedwars-plugin/target/bedwars-plugin-*.jar /tmp/BedWars1058.jar
+
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
@@ -35,7 +47,9 @@ RUN PURPUR_URL="https://api.purpurmc.org/v2/purpur/${MINECRAFT_VERSION}/latest/d
     echo "Purpur downloaded for ${MINECRAFT_VERSION}"
 
 # Download required plugins automatically
-RUN mkdir -p plugins
+RUN mkdir -p plugins && \
+    cp /tmp/BedWars1058.jar plugins/BedWars1058.jar && \
+    echo "BedWars1058 installed"
 
 # ProtocolLib - required by FastLogin
 RUN PROTO_URL=$(curl -s "https://api.github.com/repos/dmulloy2/ProtocolLib/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url') && \
@@ -142,6 +156,7 @@ COPY server.properties spigot.yml bukkit.yml eula.txt ops.json ./
 COPY config/ ./config/
 COPY plugins/ ./plugins/
 COPY world/ ./world/
+COPY maps/arenas/ ./maps/arenas/
 
 # Copy scripts
 COPY entrypoint.sh backup.sh setup-permissions.sh ./

@@ -1,31 +1,32 @@
 regions:
-  __global__:
-    min: {x: -30000000, y: -64, z: -30000000}
-    max: {x: 30000000, y: 320, z: 30000000}
-    members: {}
-    owners: {}
-    flags:
-      block-break: deny
-      block-place: deny
-      pvp: deny
-      mob-spawning: deny
-      creeper-explosion: deny
-      tnt: deny
-      lighter: deny
-      fire-spread: deny
-      lava-fire: deny
-      interact: allow
-      use: allow
-      chest-access: deny
-      item-drop: deny
-      item-pickup: allow
-      enderpearl: deny
-      entity-painting-destroy: deny
-      entity-item-frame-destroy: deny
-      leaf-decay: deny
-      ice-melt: deny
-      snow-fall: deny
-      ravager-grief: deny
-      frosted-ice-melt: deny
-    priority: 0
-    type: global
+    __global__:
+        members:
+            unique-ids: []
+        owners:
+            unique-ids: []
+        type: global
+        flags:
+            block-break: deny
+            block-place: deny
+            pvp: deny
+            mob-spawning: deny
+            creeper-explosion: deny
+            tnt: deny
+            lighter: deny
+            fire-spread: deny
+            lava-fire: deny
+            interact: allow
+            use: allow
+            chest-access: deny
+            item-drop: deny
+            item-pickup: deny
+            enderpearl: deny
+            entity-painting-destroy: deny
+            entity-item-frame-destroy: deny
+            leaf-decay: deny
+            ice-melt: deny
+            snow-fall: deny
+            ravager-grief: deny
+            frosted-ice-melt: deny
+            invincibility: allow
+        priority: 0

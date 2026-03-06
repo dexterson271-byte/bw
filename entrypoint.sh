@@ -36,6 +36,10 @@ else
     # Force update all plugins from image
     echo "[Init] Updating plugins from image..."
     cp -f /server/plugins/*.jar "${SERVER_DIR}/plugins/" 2>/dev/null || true
+    # Force update plugin configs (WorldGuard regions, TAB, etc.)
+    cp -rf /server/plugins/WorldGuard "${SERVER_DIR}/plugins/" 2>/dev/null || true
+    cp -rf /server/plugins/TAB "${SERVER_DIR}/plugins/" 2>/dev/null || true
+    cp -rf /server/plugins/VaultChatFormatter "${SERVER_DIR}/plugins/" 2>/dev/null || true
     cp -rn /server/plugins/*/ "${SERVER_DIR}/plugins/" 2>/dev/null || true
 fi
 
@@ -68,6 +72,21 @@ if [ -d /server/world ]; then
         cp -r /server/world/poi "${SERVER_DIR}/world/" 2>/dev/null || true
     fi
     echo "[Init] Lobby world synced"
+fi
+
+# Copy arena maps (each map = separate world folder)
+if [ -d /server/maps/arenas ]; then
+    echo "[Init] Copying BedWars arena maps..."
+    for MAP_DIR in /server/maps/arenas/*/; do
+        MAP_NAME=$(basename "$MAP_DIR")
+        if [ ! -d "${SERVER_DIR}/${MAP_NAME}" ]; then
+            echo "[Init] Copying arena: ${MAP_NAME}"
+            cp -r "$MAP_DIR" "${SERVER_DIR}/${MAP_NAME}"
+        else
+            echo "[Init] Arena ${MAP_NAME} already exists (skipping)"
+        fi
+    done
+    echo "[Init] Arena maps synced"
 fi
 
 # --- Start File Manager (FileBrowser) ---

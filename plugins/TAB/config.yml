@@ -1,5 +1,5 @@
 # TAB Plugin Configuration
-# Tab list formatting + nametags with rank prefixes
+# Tab list formatting + nametags + chat formatting with rank prefixes
 
 header-footer:
   enabled: true
@@ -16,6 +16,18 @@ tablist-name-formatting:
   enabled: true
   anti-override: true
   disable-condition: ''
+
+# Nametags above player heads
+nametag:
+  enabled: true
+  anti-override: true
+  disable-condition: ''
+
+# Chat formatting with rank prefixes
+chat:
+  enabled: true
+  anti-override: true
+  format: '%tabprefix%%customtabname%&r: %msg%'
 
 scoreboard:
   enabled: false

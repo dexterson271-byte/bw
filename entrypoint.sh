@@ -30,11 +30,13 @@ if [ ! -f "${SERVER_DIR}/server.jar" ]; then
     echo "[Init] Server files copied to persistent volume"
 else
     echo "[Init] Existing server detected on volume"
-    # Always update configs from image (you can remove these lines if you want volume configs to persist)
+    # Always update configs from image
     echo "[Init] Updating plugin configs from image..."
     cp -r /server/config/* "${SERVER_DIR}/config/" 2>/dev/null || true
-    # Only copy new plugins, don't overwrite existing ones
-    cp -rn /server/plugins/* "${SERVER_DIR}/plugins/" 2>/dev/null || true
+    # Force update all plugins from image
+    echo "[Init] Updating plugins from image..."
+    cp -f /server/plugins/*.jar "${SERVER_DIR}/plugins/" 2>/dev/null || true
+    cp -rn /server/plugins/*/ "${SERVER_DIR}/plugins/" 2>/dev/null || true
 fi
 
 # Ensure eula is accepted

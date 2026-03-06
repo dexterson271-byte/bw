@@ -29,8 +29,12 @@ rm -rf "${SERVER_DIR}/plugins/BedWars" 2>/dev/null || true
 rm -f "${SERVER_DIR}/plugins/BedWarsProxy.jar" 2>/dev/null || true
 rm -rf "${SERVER_DIR}/plugins/BedWarsProxy" 2>/dev/null || true
 
+# Always force-update server.jar from image (ensures version upgrades take effect)
+cp -f /server/server.jar "${SERVER_DIR}/server.jar" 2>/dev/null || true
+echo "[Init] server.jar updated from image"
+
 # On subsequent runs, the volume already has the files
-if [ ! -f "${SERVER_DIR}/server.jar" ]; then
+if [ ! -f "${SERVER_DIR}/eula.txt" ]; then
     echo "[Init] First run detected - copying server files to volume..."
     cp -rn /server/* "${SERVER_DIR}/" 2>/dev/null || true
     cp -r /server/plugins "${SERVER_DIR}/" 2>/dev/null || true

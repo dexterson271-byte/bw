@@ -74,17 +74,14 @@ fi
 # Always update server.properties from image
 cp -f /server/server.properties "${SERVER_DIR}/server.properties" 2>/dev/null || true
 
-# Copy lobby world - preserve level.dat (gamerules) on restarts
+# Copy lobby world - only on first run, preserve in-game changes on restarts
 if [ -d /server/world ]; then
     mkdir -p "${SERVER_DIR}/world"
     if [ ! -f "${SERVER_DIR}/world/level.dat" ]; then
         echo "[Init] First run - copying full lobby world..."
         cp -r /server/world/* "${SERVER_DIR}/world/" 2>/dev/null || true
     else
-        echo "[Init] Updating lobby (preserving gamerules)..."
-        cp -r /server/world/region "${SERVER_DIR}/world/" 2>/dev/null || true
-        cp -r /server/world/entities "${SERVER_DIR}/world/" 2>/dev/null || true
-        cp -r /server/world/poi "${SERVER_DIR}/world/" 2>/dev/null || true
+        echo "[Init] Lobby world already exists - preserving in-game changes"
     fi
     echo "[Init] Lobby world synced"
 fi

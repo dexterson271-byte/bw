@@ -101,8 +101,12 @@ RUN TAB_URL=$(curl -s "https://api.github.com/repos/NEZNAMY/TAB/releases/latest"
     echo "TAB downloaded"
 
 # VaultChatFormatter - chat formatting with rank prefixes from LuckPerms/Vault
-RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    curl -L -o plugins/VaultChatFormatter.jar "$VCF_URL" && \
+RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/releases/latest" | jq -r '.assets[]? | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
+    if [ -n "$VCF_URL" ] && [ "$VCF_URL" != "null" ]; then \
+        curl -L -o plugins/VaultChatFormatter.jar "$VCF_URL"; \
+    else \
+        curl -L -o plugins/VaultChatFormatter.jar "https://github.com/Vankka/VaultChatFormatter/releases/download/v1.0.1/VaultChatFormatter-1.0.1.jar"; \
+    fi && \
     echo "VaultChatFormatter downloaded"
 
 RUN echo "eula=true" > eula.txt

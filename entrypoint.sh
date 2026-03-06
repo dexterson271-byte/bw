@@ -25,6 +25,9 @@ mkdir -p "$SERVER_DIR" "$BACKUP_DIR" "$FILEBROWSER_DIR"
 rm -f "${SERVER_DIR}/plugins/BedWars-"*.jar 2>/dev/null || true
 # Remove old BedWars data folder (Screaming BedWars uses "BedWars" folder, BedWars1058 uses "BedWars1058")
 rm -rf "${SERVER_DIR}/plugins/BedWars" 2>/dev/null || true
+# Remove BedWarsProxy (incompatible with MULTIARENA mode)
+rm -f "${SERVER_DIR}/plugins/BedWarsProxy.jar" 2>/dev/null || true
+rm -rf "${SERVER_DIR}/plugins/BedWarsProxy" 2>/dev/null || true
 
 # On subsequent runs, the volume already has the files
 if [ ! -f "${SERVER_DIR}/server.jar" ]; then
@@ -138,11 +141,10 @@ if [ ! -f "${FILEBROWSER_DIR}/filebrowser.db" ]; then
         --root "${VOLUME_DIR}" \
         --auth.method=json \
         --branding.name="BedWars Server Files" 2>/dev/null || true
-    filebrowser users add admin admin \
+    filebrowser users add admin adminadmin123 \
         --database "${FILEBROWSER_DIR}/filebrowser.db" \
         --perm.admin 2>/dev/null || true
-    echo "[FileBrowser] Admin account created (user: admin, pass: admin)"
-    echo "[FileBrowser] CHANGE THE PASSWORD after first login!"
+    echo "[FileBrowser] Admin account created (user: admin, pass: adminadmin123)"
 fi
 
 filebrowser \

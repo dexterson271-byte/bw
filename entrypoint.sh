@@ -13,7 +13,7 @@ FILEBROWSER_PORT=${FILEBROWSER_PORT:-8080}
 
 echo "=============================================="
 echo "  BedWars Server - Railway Pro"
-echo "  Hypixel Style + Auth + Backups + File Manager"
+echo "  Auth + Backups + File Manager"
 echo "=============================================="
 
 # --- Setup volume directories ---

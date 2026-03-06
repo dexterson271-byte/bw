@@ -8,7 +8,7 @@ chunk-loading-basic:
   autoconfig-send-distance: true
   player-max-chunk-generate-rate: -1.0
   player-max-chunk-load-rate: -1.0
-  player-max-chunk-send-rate: 75.0
+  player-max-chunk-send-rate: 50.0
 
 chunk-loading-advanced:
   auto-config-send-distance: true
@@ -65,8 +65,9 @@ misc:
     chat-executor-max-size: -1
   fix-entity-position-desync: true
   lag-compensate-block-breaking: true
+  lag-compensate-block-placement: true
   load-permissions-yml-before-plugins: true
-  max-joins-per-tick: 5
+  max-joins-per-tick: 3
   region-file-cache-size: 256
   strict-advancement-dimension-check: false
   use-alternative-luck-formula: false
@@ -76,7 +77,7 @@ packet-limiter:
   all-packets:
     action: KICK
     interval: 7.0
-    max-packet-rate: 500.0
+    max-packet-rate: 800.0
   kick-message: "<red><lang:disconnect.exceeded_packet_rate>"
   overrides:
     ServerboundPlaceRecipePacket:

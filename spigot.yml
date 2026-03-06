@@ -6,7 +6,7 @@ settings:
   timeout-time: 60
   restart-on-crash: true
   restart-script: ./start.sh
-  netty-threads: 4
+  netty-threads: 8
   attribute:
     maxHealth:
       max: 2048.0
@@ -16,8 +16,8 @@ settings:
       max: 2048.0
   log-villager-deaths: false
   log-named-deaths: false
-  moved-wrongly-threshold: 0.0625
-  moved-too-quickly-multiplier: 10.0
+  moved-wrongly-threshold: 0.625
+  moved-too-quickly-multiplier: 20.0
   item-despawn-rate: 3000
   sample-count: 12
   

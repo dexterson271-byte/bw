@@ -143,7 +143,10 @@ tail -f "$SERVER_INPUT" | java \
     -XX:+ExitOnOutOfMemoryError \
     -Dusing.aikars.flags=https://mcflags.emc.gs \
     -Daikars.new.flags=true \
-    -Dpaper.playerconnection.keepalive=60 \
+    -Dpaper.playerconnection.keepalive=120 \
+    -Dpaper.maxCustomChannelName=64 \
+    -Dio.netty.allocator.maxOrder=9 \
+    -Dio.netty.selectorAutoRebuildThreshold=0 \
     -jar server.jar \
     --nogui \
     --port ${SERVER_PORT}

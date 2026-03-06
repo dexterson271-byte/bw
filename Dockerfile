@@ -72,6 +72,19 @@ RUN VAULT_URL=$(curl -s "https://api.github.com/repos/MilkBowl/Vault/releases/la
     curl -L -o plugins/Vault.jar "$VAULT_URL" && \
     echo "Vault downloaded"
 
+# ViaVersion + ViaBackwards + ViaRewind - allow 1.8.x to 1.20.x clients to join
+RUN VIA_URL=$(curl -s "https://api.github.com/repos/ViaVersion/ViaVersion/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
+    curl -L -o plugins/ViaVersion.jar "$VIA_URL" && \
+    echo "ViaVersion downloaded"
+
+RUN VIAB_URL=$(curl -s "https://api.github.com/repos/ViaVersion/ViaBackwards/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
+    curl -L -o plugins/ViaBackwards.jar "$VIAB_URL" && \
+    echo "ViaBackwards downloaded"
+
+RUN VIAR_URL=$(curl -s "https://api.github.com/repos/ViaVersion/ViaRewind/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
+    curl -L -o plugins/ViaRewind.jar "$VIAR_URL" && \
+    echo "ViaRewind downloaded"
+
 RUN echo "eula=true" > eula.txt
 
 # Copy all configs

@@ -1,0 +1,6 @@
+{
+  "name": "bedwars-server",
+  "description": "Hypixel-style BedWars Minecraft Server",
+  "version": "1.0.0",
+  "private": true
+}

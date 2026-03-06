@@ -1,0 +1,39 @@
+# FastLogin Configuration
+# =======================
+# Auto-authenticates premium (paid) Minecraft accounts
+# Cracked users fall through to AuthMe /login /register
+#
+# How it works:
+# 1. Player joins → FastLogin checks if username is a real premium account
+# 2. If premium → auto-login, skip /login (seamless like Hypixel)
+# 3. If cracked → player sees AuthMe /register or /login prompt
+
+# Storage for premium player cache
+driver: SQLITE
+host: 127.0.0.1
+port: 3306
+database: fastlogin
+username: ''
+password: ''
+
+# Auto register premium players in AuthMe automatically
+autoRegister: true
+
+# Premium name checking
+# MOJANG = check against Mojang API (recommended)
+premiumUuid: MOJANG
+
+# Second attempt login - if Mojang API fails, treat as cracked
+secondAttemptCracked: true
+
+# Forward skins from premium accounts
+forwardSkin: true
+
+# Switch to cracked mode if Mojang rate limits
+rateLimitExpireTime: 10
+
+# Nickname change support
+nameChangeCheck: true
+
+# Bedrock player support (if using Geyser/Floodgate)
+bedrockPrefix: '.'

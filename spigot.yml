@@ -1,0 +1,96 @@
+# Spigot configuration - Railway Pro Lag-Free BedWars
+settings:
+  save-user-cache-on-stop-event: true
+  bungeecord: false
+  player-shuffle: 0
+  timeout-time: 60
+  restart-on-crash: true
+  restart-script: ./start.sh
+  netty-threads: 4
+  attribute:
+    maxHealth:
+      max: 2048.0
+    movementSpeed:
+      max: 2048.0
+    attackDamage:
+      max: 2048.0
+  log-villager-deaths: false
+  log-named-deaths: false
+  moved-wrongly-threshold: 0.0625
+  moved-too-quickly-multiplier: 10.0
+  item-despawn-rate: 3000
+  sample-count: 12
+  
+commands:
+  replace-commands:
+    - setblock
+    - summon
+    - testforblock
+    - tellraw
+  spam-exclusions:
+    - /skill
+  silent-commandblock-console: true
+  log: true
+  tab-complete: 0
+  send-namespaced: true
+
+world-settings:
+  default:
+    verbose: false
+    mob-spawn-range: 4
+    growth:
+      cactus-modifier: 100
+      cane-modifier: 100
+      melon-modifier: 100
+      mushroom-modifier: 100
+      pumpkin-modifier: 100
+      sapling-modifier: 100
+      beetroot-modifier: 100
+      carrot-modifier: 100
+      potato-modifier: 100
+      wheat-modifier: 100
+    entity-activation-range:
+      animals: 16
+      monsters: 24
+      raiders: 32
+      misc: 8
+      water: 8
+      villagers: 16
+      flying-monsters: 32
+      tick-inactive-villagers: false
+      wake-up-inactive:
+        animals-for: 60
+        animals-every: 200
+        animals-max-per-tick: 2
+        monsters-for: 60
+        monsters-every: 200
+        monsters-max-per-tick: 4
+        villagers-for: 60
+        villagers-every: 200
+        villagers-max-per-tick: 1
+        flying-monsters-for: 60
+        flying-monsters-every: 200
+        flying-monsters-max-per-tick: 1
+    merge-radius:
+      exp: 4.0
+      item: 3.5
+    max-entity-collisions: 2
+    max-tick-time:
+      tile: 1000
+      entity: 1000
+    arrow-despawn-rate: 100
+    trident-despawn-rate: 100
+    nerf-spawner-mobs: true
+    zombie-aggressive-towards-villager: false
+    enable-zombie-pigmen-portal-spawns: false
+    hanging-tick-frequency: 100
+    wither-spawn-sound-radius: 0
+    dragon-death-sound-radius: 0
+    hopper-amount: 1
+    hopper-can-load-chunks: false
+    entity-tracking-range:
+      players: 48
+      animals: 32
+      monsters: 32
+      misc: 16
+      other: 48

@@ -1,0 +1,56 @@
+# LuckPerms Configuration
+# =======================
+# Permissions plugin for ranks: Owner, Admin, Default
+
+server: bedwars
+storage-method: H2
+data:
+  address: localhost
+  database: luckperms
+  username: root
+  password: ''
+  pool-settings:
+    maximum-pool-size: 10
+    minimum-idle: 10
+    maximum-lifetime: 1800000
+    connection-timeout: 5000
+
+# Sync across servers (not needed for single server)
+messaging-service: none
+auto-push-updates: true
+push-log-entries: true
+broadcast-received-log-entries: false
+
+# Apply group weights for tag priority
+# Higher weight = higher priority in chat/tab
+meta-formatting:
+  prefix:
+    format:
+      - "highest"
+    duplicates: first-only
+    start-spacer: ""
+    middle-spacer: " "
+    end-spacer: ""
+  suffix:
+    format:
+      - "highest"
+    duplicates: first-only
+    start-spacer: ""
+    middle-spacer: " "
+    end-spacer: ""
+
+# Misc settings
+include-global: true
+include-global-world: true
+apply-global-groups: true
+apply-global-world-groups: true
+apply-wildcards: true
+apply-regex: true
+apply-shorthand: true
+
+use-server-uuid-cache: false
+allow-invalid-usernames: true
+prevent-primary-group-removal: false
+log-notify: true
+auto-install-translations: true
+disabled-contexts: []

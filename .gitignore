@@ -1,0 +1,16 @@
+# Ignore server runtime files
+world/
+world_nether/
+world_the_end/
+logs/
+crash-reports/
+*.log
+cache/
+versions/
+libraries/
+bundler/
+*.lock
+.console_history
+
+# Ignore large binary files that get downloaded at build time  
+server.jar

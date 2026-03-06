@@ -1,0 +1,198 @@
+# Screaming BedWars - Hypixel-Style Configuration
+# ================================================
+# This config mimics Hypixel BedWars as closely as possible.
+
+prefix: "&8[&cBedWars&8]"
+debug: false
+allow-crafting: false
+keep-inventory-on-death: false
+keep-armor-on-death: false
+in-lobby-colored-leather-by-team: true
+joined-worn-skin: false
+friendlyfire: false
+player-drops: false
+join-randomly-after-lobby-timeout: false
+prevent-killing-villagers: true
+compass-enabled: true
+join-randomly-on-lobby-join: false
+add-wool-to-inventory-on-join: true
+prevent-spawning-mobs: true
+spawner-holograms: true
+spawner-disable-merge: true
+spawner-holograms-countdown: true
+damage-when-player-is-not-in-arena: false
+remove-unused-target-blocks: true
+allow-block-falling: true
+game-start-items: false
+player-respawn-items: false
+giveKillerResources: true
+holo-above-bed: true
+allow-fake-death: true
+instances-enabled: false
+show-game-info-on-start: true
+
+# Hypixel-style respawn
+respawn-cooldown:
+  enabled: true
+  time: 5
+
+# Hypixel-style target block (bed)
+target-block:
+  allow-destroying-with-explosions: true
+  # Respawn anchor and cake options for other modes
+  respawn-anchor:
+    fill-on-start: true
+    enable-decrease: true
+  cake:
+    destroy-by-eating: true
+
+# Lobby scoreboard (Hypixel-style)
+lobby-scoreboard:
+  enabled: true
+  title: "&e&lBED WARS"
+  content:
+    - ""
+    - "&7%date%"
+    - ""
+    - "&fMap: &a%arena%"
+    - "&fPlayers: &a%players%/%maxplayers%"
+    - ""
+    - "&fWaiting..."
+    - ""
+    - "&ewww.yourserver.com"
+
+# Game scoreboard (Hypixel-style)
+game-scoreboard:
+  enabled: true
+  title: "&e&lBED WARS"
+  content:
+    - ""
+    - "&7%date%"
+    - ""
+    - "%team_status%"
+    - ""
+    - "&fKills: &a%kills%"
+    - "&fFinal Kills: &a%finalkills%"
+    - "&fBeds Broken: &a%beddestroys%"
+    - ""
+    - "&ewww.yourserver.com"
+
+# Team status format on scoreboard
+team-status:
+  format: "%color%%team_letter% &f%team_name%: %team_bed_status% &7%team_players_alive%"
+  bed-alive: "&a✔"
+  bed-destroyed: "&c%players%"
+  team-eliminated: "&c✘"
+
+# Chat formats (Hypixel-style)
+game-chat:
+  all-chat:
+    enabled: true
+    format: "&7ALL &8| %color%[%team%] %player%&7: %message%"
+  team-chat:
+    enabled: true
+    format: "&aTEAM &8| %color%[%team%] %player%&7: %message%"
+
+# Death messages
+death-messages:
+  default-death: "%color%%player% &7died."
+  pvp-death: "%color%%player% &7was killed by %killer_color%%killer%&7."
+  void-death: "%color%%player% &7fell into the void."
+  void-pvp-death: "%color%%player% &7was knocked into the void by %killer_color%%killer%&7."
+  explosion-death: "%color%%player% &7was blown up by %killer_color%%killer%&7."
+
+# Economy / Resource drops (Hypixel-style timings)
+spawner:
+  # Iron spawner - every 1 second
+  default-iron:
+    material: IRON_INGOT
+    color: WHITE
+    spread: 1.0
+    name: "Iron"
+    interval: 1
+    amount: 1
+    hologram: "&f&lIron"
+    max-spawned-resources: 64
+    
+  # Gold spawner - every 6 seconds  
+  default-gold:
+    material: GOLD_INGOT
+    color: GOLD
+    spread: 1.0
+    name: "Gold"
+    interval: 6
+    amount: 1
+    hologram: "&6&lGold"
+    max-spawned-resources: 16
+    
+  # Diamond spawner - every 30 seconds (Tier I)
+  default-diamond:
+    material: DIAMOND
+    color: AQUA
+    spread: 1.0
+    name: "Diamond"
+    interval: 30
+    amount: 1
+    hologram: "&b&lDiamond"
+    hologram-tier: "&eTier &c%tier%"
+    max-spawned-resources: 8
+    
+  # Emerald spawner - every 60 seconds (Tier I)
+  default-emerald:
+    material: EMERALD
+    color: GREEN
+    spread: 1.0
+    name: "Emerald"
+    interval: 60
+    amount: 1
+    hologram: "&2&lEmerald"
+    hologram-tier: "&eTier &c%tier%"
+    max-spawned-resources: 4
+
+# Hypixel BedWars upgrade tiers
+upgrades:
+  timer: true
+  timer-period: 360
+  show-timer: true
+  
+# Experimental features
+experimental:
+  new-deathmessages: true
+
+# Event/resource upgrade timers (Hypixel-style game events)
+game-events:
+  - time: 360
+    event: "diamond-upgrade-tier-ii"
+    message: "&bDiamond Generators &ehave been upgraded to &cTier II"
+  - time: 720
+    event: "emerald-upgrade-tier-ii"
+    message: "&2Emerald Generators &ehave been upgraded to &cTier II"
+  - time: 1080
+    event: "diamond-upgrade-tier-iii"
+    message: "&bDiamond Generators &ehave been upgraded to &cTier III"
+  - time: 1440
+    event: "emerald-upgrade-tier-iii"
+    message: "&2Emerald Generators &ehave been upgraded to &cTier III"
+  - time: 1800
+    event: "bed-destruction"
+    message: "&cAll beds have been destroyed!"
+  - time: 2400
+    event: "dragon-spawn"
+    message: "&6Sudden Death: &cDragons have been spawned!"
+  - time: 3000
+    event: "game-end"
+    message: "&cGame Over!"
+
+# Statistics
+statistics:
+  enabled: true
+  type: yaml
+  bed-destroyed-kills: false
+  scores:
+    kill: 10
+    final-kill: 25
+    die: 0
+    win: 100
+    bed-destroy: 50
+    lose: 0
+    record: 0

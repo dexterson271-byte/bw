@@ -1,0 +1,110 @@
+# AuthMe Configuration - Cracked + Premium Server
+# =================================================
+# Cracked players must /register and /login
+# Premium players auto-login via FastLogin
+
+DataSource:
+  mySQLHost: 127.0.0.1
+  mySQLPort: '3306'
+  mySQLUsername: authme
+  mySQLPassword: ''
+  mySQLDatabase: authme
+  mySQLTablename: authme
+  mySQLColumnName: username
+  mySQLColumnPassword: password
+  mySQLColumnIp: ip
+  mySQLColumnLastLogin: lastlogin
+  mySQLColumnEmail: email
+  mySQLColumnRealName: realname
+  backend: SQLITE
+
+settings:
+  sessions:
+    enabled: true
+    timeout: 720
+  registration:
+    enabled: true
+    force: true
+    type: PASSWORD
+    forceKickAfterLogin: false
+    forceLoginAfterRegister: true
+  security:
+    minPasswordLength: 4
+    maxPasswordLength: 50
+    unsafePasswords: []
+    passwordHash: BCRYPT_2A
+    bcryptLog2Rounds: 10
+    preventOtherCase: false
+    removeExistingPlayerOnJoin: true   
+  restrictions:
+    maxRegPerIp: 3
+    maxLoginPerIp: 3
+    maxJoinPerIp: 3
+    allowMovement: false
+    noTeleport: true
+    allowedMovementRadius: 0
+    timeout: 60
+    allowedCommands:
+      - /login
+      - /register
+      - /l
+      - /reg
+    kickOnWrongPassword: true
+    maxLoginAttemptsBeforeKick: 5
+    tempbanOnMaxLogins: true
+    tempbanLength: 480
+    displayOtherAccounts: true
+    allowAllCommandsIfRegistrationIsOptional: false
+  GameMode:
+    ForceGameMode: true
+    ForceGameModeMode: ADVENTURE
+    ResetInventoryIfCreative: false
+  unrestrictions:
+    UnrestrictedName:
+      - HassanLegend
+  
+messages:
+  login: "&a[BedWars] &fPlease login with &e/login <password>"
+  register: "&a[BedWars] &fPlease register with &e/register <password> <password>"
+  loginSuccess: "&a[BedWars] &aSuccessfully logged in!"
+  registerSuccess: "&a[BedWars] &aSuccessfully registered!"
+  wrongPassword: "&a[BedWars] &cWrong password!"
+  alreadyLoggedIn: "&a[BedWars] &cYou are already logged in!"
+  notRegistered: "&a[BedWars] &cYou are not registered! Use &e/register <password> <password>"
+  registeredMessage: "&a[BedWars] &cAlready registered! Use &e/login <password>"
+  sessionReconnect: "&a[BedWars] &aSession resumed, auto logged in!"
+  maxRegMessage: "&a[BedWars] &cYou have reached the maximum number of registrations!"
+  kick_timeout: "&a[BedWars] &cYou took too long to login!"
+  kick_wrongpassword: "&a[BedWars] &cToo many wrong password attempts!"
+
+Hooks:
+  useEssentialsMotd: false
+  disableSocialSpy: true
+
+Protection:
+  enableProtection: true
+  countries: []
+  enableCountryWhitelist: false
+
+Purge:
+  useAutoAge: false
+  daysBeforePurge: 60
+
+BackupSystem:
+  ActivateBackup: false
+
+Converter:
+  CrazyLogin:
+    fileName: ''
+  Rakamak:
+    fileName: ''
+    useIP: false
+    ipFileName: ''
+
+Email:
+  mailAccount: ''
+  mailPassword: ''
+  mailSMTP: smtp.gmail.com
+  mailPort: 465
+  mailAddress: ''
+  RecoveryPasswordLength: 8

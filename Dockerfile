@@ -138,16 +138,8 @@ RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/re
     fi && \
     echo "VaultChatFormatter downloaded"
 
-# Citizens - NPC plugin for BedWars1058 join NPCs
-# Download from GitHub releases (most reliable)
-RUN CITIZENS_URL=$(curl -s "https://api.github.com/repos/CitizensDev/Citizens2/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    if [ -n "$CITIZENS_URL" ] && [ "$CITIZENS_URL" != "null" ]; then \
-        curl -L -o plugins/Citizens.jar "$CITIZENS_URL"; \
-    else \
-        curl -L -o plugins/Citizens.jar "https://github.com/CitizensDev/Citizens2/releases/download/2.0.35-b3546/Citizens-2.0.35-b3546.jar"; \
-    fi && \
-    ls -la plugins/Citizens.jar && \
-    echo "Citizens downloaded"
+# Citizens - NPC plugin for BedWars1058 join NPCs (pre-built JAR in plugins/)
+# Citizens2 has no GitHub releases, so we include it as a pre-built JAR
 
 # Validate all plugin JARs (remove corrupt/empty ones)
 RUN for jar in plugins/*.jar; do \

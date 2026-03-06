@@ -48,7 +48,7 @@ else
         if [ ! -s "$jar" ]; then
             echo "[Init] Removing empty JAR: $(basename "$jar")"
             rm -f "$jar"
-        elif ! jar tf "$jar" > /dev/null 2>&1; then
+        elif ! unzip -tq "$jar" > /dev/null 2>&1; then
             echo "[Init] Removing corrupt JAR: $(basename "$jar")"
             rm -f "$jar"
         fi

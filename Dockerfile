@@ -20,7 +20,7 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 WORKDIR /server
 
 # Install required packages (filebrowser for web file manager)
-RUN apk add --no-cache curl bash jq tar gzip && \
+RUN apk add --no-cache curl bash jq tar gzip unzip && \
     curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
 
 # Railway Pro: 8GB RAM, use 6G for Java (leave room for FileBrowser + OS)
@@ -145,7 +145,7 @@ RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/re
 RUN for jar in plugins/*.jar; do \
         if [ ! -s "$jar" ]; then \
             echo "WARNING: Empty JAR detected, removing: $jar" && rm -f "$jar"; \
-        elif ! jar tf "$jar" > /dev/null 2>&1; then \
+        elif ! unzip -tq "$jar" > /dev/null 2>&1; then \
             echo "WARNING: Corrupt JAR detected, removing: $jar" && rm -f "$jar"; \
         fi; \
     done && echo "All plugin JARs validated"

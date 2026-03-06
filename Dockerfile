@@ -44,8 +44,13 @@ RUN PROTO_URL=$(curl -s "https://api.github.com/repos/dmulloy2/ProtocolLib/relea
     echo "ProtocolLib downloaded"
 
 # AuthMe - login/register for cracked players
-RUN AUTH_URL=$(curl -s "https://api.github.com/repos/AuthMe/AuthMeReloaded/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url') && \
-    curl -L -o plugins/AuthMe.jar "$AUTH_URL" && \
+RUN AUTH_URL=$(curl -s "https://api.github.com/repos/AuthMe/AuthMeReloaded/releases/latest" | jq -r '[.assets[] | select(.name | endswith(".jar")) | select(.name | test("source|javadoc";"i") | not)][0].browser_download_url') && \
+    if [ -n "$AUTH_URL" ] && [ "$AUTH_URL" != "null" ]; then \
+        curl -L -o plugins/AuthMe.jar "$AUTH_URL"; \
+    else \
+        AUTH_URL=$(curl -s "https://api.github.com/repos/AuthMe/AuthMeReloaded/releases/latest" | jq -r '.assets[0].browser_download_url') && \
+        curl -L -o plugins/AuthMe.jar "$AUTH_URL"; \
+    fi && \
     echo "AuthMe downloaded"
 
 # FastLogin - auto-login for premium players  

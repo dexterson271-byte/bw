@@ -138,6 +138,16 @@ RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/re
     fi && \
     echo "VaultChatFormatter downloaded"
 
+# Citizens - NPC plugin for BedWars1058 join NPCs
+RUN curl -L -o plugins/Citizens.jar \
+    "https://ci.citizensnpcs.co/job/Citizens2/lastSuccessfulBuild/artifact/dist/target/Citizens-2.0.37-b3662.jar" && \
+    if [ ! -s plugins/Citizens.jar ]; then \
+        echo "Primary Citizens URL failed, trying Maven repo..." && \
+        curl -L -o plugins/Citizens.jar "https://repo.citizensnpcs.co/net/citizensnpcs/citizens-main/2.0.35/citizens-main-2.0.35.jar"; \
+    fi && \
+    ls -la plugins/Citizens.jar && \
+    echo "Citizens downloaded"
+
 RUN echo "eula=true" > eula.txt
 
 # Copy all configs

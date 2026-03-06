@@ -21,6 +21,11 @@ mkdir -p "$SERVER_DIR" "$BACKUP_DIR" "$FILEBROWSER_DIR"
 
 # --- Sync server files to volume on first run ---
 # This copies the built image files into the persistent volume
+# Remove old Screaming BedWars from volume if it exists (replaced by BedWars1058)
+rm -f "${SERVER_DIR}/plugins/BedWars-"*.jar 2>/dev/null || true
+# Remove old BedWars data folder (Screaming BedWars uses "BedWars" folder, BedWars1058 uses "BedWars1058")
+rm -rf "${SERVER_DIR}/plugins/BedWars" 2>/dev/null || true
+
 # On subsequent runs, the volume already has the files
 if [ ! -f "${SERVER_DIR}/server.jar" ]; then
     echo "[Init] First run detected - copying server files to volume..."
@@ -33,6 +38,9 @@ else
     # Always update configs from image
     echo "[Init] Updating plugin configs from image..."
     cp -r /server/config/* "${SERVER_DIR}/config/" 2>/dev/null || true
+    # Remove old Screaming BedWars plugin (replaced by BedWars1058)
+    rm -f "${SERVER_DIR}/plugins/BedWars-"*.jar 2>/dev/null || true
+    rm -f "${SERVER_DIR}/plugins/BedWars1058-"*.jar 2>/dev/null || true
     # Force update all plugins from image
     echo "[Init] Updating plugins from image..."
     cp -f /server/plugins/*.jar "${SERVER_DIR}/plugins/" 2>/dev/null || true

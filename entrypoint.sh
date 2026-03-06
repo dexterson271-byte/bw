@@ -42,8 +42,15 @@ fi
 # Ensure eula is accepted
 echo "eula=true" > "${SERVER_DIR}/eula.txt"
 
-# Always copy ops.json (ensure owner is always opped)
-cp -f /server/ops.json "${SERVER_DIR}/ops.json" 2>/dev/null || true
+# Merge ops.json - preserve existing ops (admins etc) while ensuring HassanLegend stays opped
+if [ -f "${SERVER_DIR}/ops.json" ]; then
+    echo "[Init] Merging ops.json (preserving existing ops)..."
+    jq -s 'flatten | unique_by(.uuid)' "${SERVER_DIR}/ops.json" /server/ops.json > /tmp/ops_merged.json 2>/dev/null && \
+        mv /tmp/ops_merged.json "${SERVER_DIR}/ops.json" || \
+        echo "[Init] ops.json merge failed, keeping existing"
+else
+    cp /server/ops.json "${SERVER_DIR}/ops.json"
+fi
 
 # Always update server.properties from image
 cp -f /server/server.properties "${SERVER_DIR}/server.properties" 2>/dev/null || true

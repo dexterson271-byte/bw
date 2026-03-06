@@ -19,9 +19,10 @@ wait_for_server() {
     echo "[PermSetup] Server is ready!"
 }
 
+# Always wait for server (needed for gamerules and first-time setup)
+wait_for_server
+
 if [ ! -f "$SETUP_FLAG" ] && [ -f "$SETUP_FILE" ]; then
-    wait_for_server
-    
     echo "[PermSetup] Running first-time permission setup..."
     
     # Extract commands from JSON and execute via RCON or screen
@@ -47,3 +48,12 @@ else
         echo "[PermSetup] Permissions already configured (skipping)"
     fi
 fi
+
+# ============================================
+# Always run on every server start
+# ============================================
+echo "[AutoConfig] Setting lobby gamerules..."
+echo "gamerule doImmediateRespawn true" > /data/server/server_input
+sleep 1
+echo "[AutoConfig] Auto-respawn enabled in lobby"
+echo "[AutoConfig] BedWars arenas use 5s respawn from BedWars config"

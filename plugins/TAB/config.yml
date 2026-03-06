@@ -1,0 +1,49 @@
+# TAB Plugin Configuration
+# Tab list formatting + nametags with rank prefixes
+
+header-footer:
+  enabled: true
+  header:
+  - ' '
+  - '&e&lBED WARS'
+  - ' '
+  footer:
+  - ' '
+  - '&7Type /bw join to play!'
+  - ' '
+
+tablist-name-formatting:
+  enabled: true
+  anti-override: true
+  disable-condition: ''
+
+scoreboard:
+  enabled: false
+
+bossbar:
+  enabled: false
+
+yellow-number-in-tablist:
+  enabled: false
+
+belowname-objective:
+  enabled: false
+
+layout:
+  enabled: false
+
+ping-spoof:
+  enabled: false
+
+global-playerlist:
+  enabled: false
+
+per-world-playerlist:
+  enabled: false
+
+prevent-spectator-effect:
+  enabled: true
+
+placeholder-output-replacements: {}
+
+conditions: {}

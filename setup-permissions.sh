@@ -75,7 +75,9 @@ echo "gamerule fallDamage false" > /data/server/server_input
 sleep 0.5
 echo "gamerule announceAdvancements false" > /data/server/server_input
 sleep 0.5
+echo "gamerule spawnRadius 0" > /data/server/server_input
+sleep 0.5
 echo "difficulty peaceful" > /data/server/server_input
 sleep 1
-echo "[AutoConfig] Lobby fully protected - no block break/place, no mobs, no weather"
+echo "[AutoConfig] Lobby fully protected - adventure mode, no mobs, no weather"
 echo "[AutoConfig] WorldGuard __global__ region active - denies building for ALL players including OPs"

@@ -40,7 +40,14 @@ else
     cp -rf /server/plugins/WorldGuard "${SERVER_DIR}/plugins/" 2>/dev/null || true
     cp -rf /server/plugins/TAB "${SERVER_DIR}/plugins/" 2>/dev/null || true
     cp -rf /server/plugins/VaultChatFormatter "${SERVER_DIR}/plugins/" 2>/dev/null || true
+    cp -rf /server/plugins/BedWars1058 "${SERVER_DIR}/plugins/" 2>/dev/null || true
     cp -rn /server/plugins/*/ "${SERVER_DIR}/plugins/" 2>/dev/null || true
+fi
+
+# Ensure BedWars1058 uses MULTIARENA mode (not BUNGEE)
+if [ -f "${SERVER_DIR}/plugins/BedWars1058/config.yml" ]; then
+    sed -i 's/^serverType:.*/serverType: MULTIARENA/' "${SERVER_DIR}/plugins/BedWars1058/config.yml"
+    echo "[Init] BedWars1058 serverType forced to MULTIARENA"
 fi
 
 # Ensure eula is accepted

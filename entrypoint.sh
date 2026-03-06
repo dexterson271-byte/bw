@@ -145,6 +145,11 @@ if [ ! -f "${FILEBROWSER_DIR}/filebrowser.db" ]; then
         --database "${FILEBROWSER_DIR}/filebrowser.db" \
         --perm.admin 2>/dev/null || true
     echo "[FileBrowser] Admin account created (user: admin, pass: adminadmin123)"
+else
+    # Force update password on existing DB
+    filebrowser users update admin --password adminadmin123 \
+        --database "${FILEBROWSER_DIR}/filebrowser.db" 2>/dev/null || true
+    echo "[FileBrowser] Admin password updated"
 fi
 
 filebrowser \

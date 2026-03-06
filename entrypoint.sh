@@ -137,17 +137,17 @@ mkdir -p "${FILEBROWSER_DIR}"
 # Always recreate filebrowser DB to ensure correct credentials
 rm -f "${FILEBROWSER_DIR}/filebrowser.db"
 echo "[FileBrowser] Creating fresh admin account..."
-filebrowser config init --database "${FILEBROWSER_DIR}/filebrowser.db" 2>/dev/null || true
+filebrowser config init --database "${FILEBROWSER_DIR}/filebrowser.db" > /dev/null 2>&1 || true
 filebrowser config set \
     --database "${FILEBROWSER_DIR}/filebrowser.db" \
     --address "0.0.0.0" \
     --port "${FILEBROWSER_PORT}" \
     --root "${VOLUME_DIR}" \
     --auth.method=json \
-    --branding.name="BedWars Server Files" 2>/dev/null || true
+    --branding.name="BedWars Server Files" > /dev/null 2>&1 || true
 filebrowser users add admin adminadmin123 \
     --database "${FILEBROWSER_DIR}/filebrowser.db" \
-    --perm.admin 2>/dev/null || true
+    --perm.admin || echo "[FileBrowser] WARNING: Failed to create admin user"
 echo "[FileBrowser] Admin account created (user: admin, pass: adminadmin123)"
 
 filebrowser \

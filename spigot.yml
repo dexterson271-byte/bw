@@ -16,8 +16,8 @@ settings:
       max: 2048.0
   log-villager-deaths: false
   log-named-deaths: false
-  moved-wrongly-threshold: 0.625
-  moved-too-quickly-multiplier: 20.0
+  moved-wrongly-threshold: 0.0625
+  moved-too-quickly-multiplier: 300.0
   item-despawn-rate: 3000
   sample-count: 12
   
@@ -38,6 +38,9 @@ world-settings:
   default:
     verbose: false
     mob-spawn-range: 4
+    merge-radius:
+      item: 4.0
+      exp: 6.0
     growth:
       cactus-modifier: 100
       cane-modifier: 100

@@ -1,0 +1,37 @@
+# Purpur World Configuration - PvP & Knockback Optimized for High-Ping
+# =====================================================================
+
+_version: 30
+
+gameplay-mechanics:
+  use-better-mending: true
+  disable-drops-on-cramming-death: true
+  fix-curing-zombie-villager-discount-exploit: true
+  milk-cures-bad-omen: true
+  player:
+    fix-stuck-in-portal: true
+    teleport-if-outside-border: true
+    totem-of-undying-works-in-inventory: true
+  entities-can-use-portals: true
+  silk-touch:
+    enabled: false
+
+mobs:
+  zombie:
+    aggressive-towards-villager-when-lagging: false
+  phantom:
+    spawn:
+      min-time: 72000
+      max-time: 144000
+
+blocks:
+  bed:
+    explode: true
+    explosion-power: 5.0
+    explosion-fire: false
+    explosion-effect: DESTROY
+  respawn-anchor:
+    explode: true
+    explosion-power: 5.0
+    explosion-fire: false
+    explosion-effect: DESTROY

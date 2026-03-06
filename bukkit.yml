@@ -1,0 +1,33 @@
+# Bukkit configuration - BedWars Optimized
+settings:
+  allow-end: false
+  warn-on-overload: true
+  permissions-file: permissions.yml
+  update-folder: update
+  plugin-profiling: false
+  connection-throttle: -1
+  query-plugins: false
+  deprecated-verbose: false
+  shutdown-message: Server closed
+
+spawn-limits:
+  monsters: 20
+  animals: 5
+  water-animals: 2
+  water-ambient: 2
+  water-underground-creature: 2
+  axolotls: 2
+  ambient: 1
+
+chunk-gc:
+  period-in-ticks: 400
+
+ticks-per:
+  animal-spawns: 400
+  monster-spawns: 10
+  water-spawns: 400
+  water-ambient-spawns: 400
+  water-underground-creature-spawns: 400
+  axolotl-spawns: 400
+  ambient-spawns: 400
+  autosave: 6000

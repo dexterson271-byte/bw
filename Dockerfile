@@ -1,6 +1,6 @@
 # ==============================================
 # BedWars Server - Railway Pro Optimized
-# Paper MC + Screaming BedWars (Hypixel-Style)
+# Purpur MC + Screaming BedWars (Hypixel-Style)
 # Auth: AuthMe + FastLogin (cracked + premium)
 # Perms: LuckPerms + Vault (Owner/Admin tags)
 # Extras: FileBrowser + Auto Backups
@@ -29,11 +29,10 @@ ENV FILEBROWSER_PORT=8080
 ENV BACKUP_INTERVAL=30
 ENV MAX_BACKUPS=10
 
-# Download Paper MC server (latest stable build)
-RUN PAPER_BUILDS_URL="https://api.papermc.io/v2/projects/paper/versions/${MINECRAFT_VERSION}/builds" && \
-    LATEST_BUILD=$(curl -s "$PAPER_BUILDS_URL" | jq -r '.builds[-1].build') && \
-    PAPER_JAR="paper-${MINECRAFT_VERSION}-${LATEST_BUILD}.jar" && \
-    curl -o server.jar "https://api.papermc.io/v2/projects/paper/versions/${MINECRAFT_VERSION}/builds/${LATEST_BUILD}/downloads/${PAPER_JAR}"
+# Download Purpur MC server (Paper fork with PvP/knockback tuning)
+RUN PURPUR_URL="https://api.purpurmc.org/v2/purpur/${MINECRAFT_VERSION}/latest/download" && \
+    curl -o server.jar "$PURPUR_URL" && \
+    echo "Purpur downloaded for ${MINECRAFT_VERSION}"
 
 # Download required plugins automatically
 RUN mkdir -p plugins
@@ -100,6 +99,15 @@ RUN TAB_URL=$(curl -s "https://api.github.com/repos/NEZNAMY/TAB/releases/latest"
     curl -L -o plugins/TAB.jar "$TAB_URL" && \
     echo "TAB downloaded"
 
+# spark - performance profiler and TPS monitor
+RUN SPARK_URL=$(curl -s "https://api.github.com/repos/lucko/spark/releases/latest" | jq -r '.assets[] | select(.name | test("bukkit|paper";"i")) | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
+    if [ -n "$SPARK_URL" ] && [ "$SPARK_URL" != "null" ]; then \
+        curl -L -o plugins/spark.jar "$SPARK_URL"; \
+    else \
+        curl -L -o plugins/spark.jar "https://ci.lucko.me/job/spark/lastSuccessfulBuild/artifact/spark-bukkit/build/libs/spark-bukkit.jar"; \
+    fi && \
+    echo "spark downloaded"
+
 # VaultChatFormatter - chat formatting with rank prefixes from LuckPerms/Vault
 RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/releases/latest" | jq -r '.assets[]? | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
     if [ -n "$VCF_URL" ] && [ "$VCF_URL" != "null" ]; then \
@@ -112,7 +120,7 @@ RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/re
 RUN echo "eula=true" > eula.txt
 
 # Copy all configs
-COPY server.properties spigot.yml eula.txt ops.json ./
+COPY server.properties spigot.yml bukkit.yml eula.txt ops.json ./
 COPY config/ ./config/
 COPY plugins/ ./plugins/
 COPY world/ ./world/

@@ -90,8 +90,18 @@ if [ -d /server/world ]; then
 fi
 
 # Copy arena maps (each map = separate world folder)
+# BedWars1058 requires lowercase folder names
 if [ -d /server/maps/arenas ]; then
     echo "[Init] Copying BedWars arena maps..."
+    # Remove old uppercase arena folders from volume (replaced by lowercase)
+    for OLD_DIR in "${SERVER_DIR}"/*/; do
+        DIR_NAME=$(basename "$OLD_DIR")
+        LOWER_NAME=$(echo "$DIR_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '_' | tr '-' '_')
+        if [ "$DIR_NAME" != "$LOWER_NAME" ] && [ -d "/server/maps/arenas/${LOWER_NAME}" ]; then
+            echo "[Init] Removing old uppercase arena: ${DIR_NAME} (replaced by ${LOWER_NAME})"
+            rm -rf "$OLD_DIR"
+        fi
+    done
     for MAP_DIR in /server/maps/arenas/*/; do
         MAP_NAME=$(basename "$MAP_DIR")
         if [ ! -d "${SERVER_DIR}/${MAP_NAME}" ]; then

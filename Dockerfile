@@ -64,7 +64,8 @@ RUN FAST_URL=$(curl -s "https://api.github.com/repos/TuxCoding/FastLogin/release
 
 # LuckPerms - permissions (owner/admin/vip ranks with tags)
 RUN curl -L -o plugins/LuckPerms.jar \
-    "https://download.luckperms.net/1549/bukkit/loader/LuckPerms-Bukkit-5.4.137.jar" && \
+    "https://download.luckperms.net/1624/bukkit/loader/LuckPerms-Bukkit-5.5.36.jar" && \
+    ls -la plugins/LuckPerms.jar && \
     echo "LuckPerms downloaded"
 
 # Vault - economy/permissions API bridge

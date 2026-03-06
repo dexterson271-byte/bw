@@ -108,6 +108,24 @@ RUN SPARK_URL=$(curl -s "https://api.github.com/repos/lucko/spark/releases/lates
     fi && \
     echo "spark downloaded"
 
+# FastAsyncWorldEdit (FAWE) - required by WorldGuard
+RUN FAWE_URL=$(curl -s "https://api.github.com/repos/IntellectualSites/FastAsyncWorldEdit/releases/latest" | jq -r '.assets[] | select(.name | test("Bukkit")) | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
+    if [ -n "$FAWE_URL" ] && [ "$FAWE_URL" != "null" ]; then \
+        curl -L -o plugins/FastAsyncWorldEdit.jar "$FAWE_URL"; \
+    else \
+        curl -L -o plugins/FastAsyncWorldEdit.jar "https://ci.athion.net/job/FastAsyncWorldEdit/lastSuccessfulBuild/artifact/artifacts/FastAsyncWorldEdit-Bukkit.jar"; \
+    fi && \
+    echo "FAWE downloaded"
+
+# WorldGuard - lobby protection (block-break/place deny)
+RUN WG_URL=$(curl -s "https://api.github.com/repos/EngineHub/WorldGuard/releases/latest" | jq -r '.assets[] | select(.name | test("bukkit";"i")) | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
+    if [ -n "$WG_URL" ] && [ "$WG_URL" != "null" ]; then \
+        curl -L -o plugins/WorldGuard.jar "$WG_URL"; \
+    else \
+        curl -L -o plugins/WorldGuard.jar "https://dev.bukkit.org/projects/worldguard/files/latest"; \
+    fi && \
+    echo "WorldGuard downloaded"
+
 # VaultChatFormatter - chat formatting with rank prefixes from LuckPerms/Vault
 RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/releases/latest" | jq -r '.assets[]? | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
     if [ -n "$VCF_URL" ] && [ "$VCF_URL" != "null" ]; then \

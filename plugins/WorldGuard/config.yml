@@ -1,0 +1,18 @@
+# WorldGuard Configuration
+op-permissions: false
+build-permission-nodes:
+  enable: true
+  deny-message: '&cYou cannot build in the lobby!'
+regions:
+  use-paper-entity-origin: true
+  cancel-chat-without-recipients: true
+  max-region-count-per-player:
+    default: 0
+  claim-only-inside-existing-regions: false
+  set-parent-on-claim: true
+protection:
+  item-durability: true
+  remove-infinite-stacks: false
+  disable-xp-orb-drops: true
+  disable-obsidian-generators: true
+  use-max-priority-association: false

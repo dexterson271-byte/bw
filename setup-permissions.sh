@@ -54,6 +54,24 @@ fi
 # ============================================
 echo "[AutoConfig] Setting lobby gamerules..."
 echo "gamerule doImmediateRespawn true" > /data/server/server_input
+sleep 0.5
+echo "gamerule doDaylightCycle false" > /data/server/server_input
+sleep 0.5
+echo "gamerule doWeatherCycle false" > /data/server/server_input
+sleep 0.5
+echo "gamerule doMobSpawning false" > /data/server/server_input
+sleep 0.5
+echo "gamerule doFireTick false" > /data/server/server_input
+sleep 0.5
+echo "gamerule randomTickSpeed 0" > /data/server/server_input
+sleep 0.5
+echo "gamerule doTileDrops false" > /data/server/server_input
+sleep 0.5
+echo "gamerule fallDamage false" > /data/server/server_input
+sleep 0.5
+echo "gamerule announceAdvancements false" > /data/server/server_input
+sleep 0.5
+echo "difficulty peaceful" > /data/server/server_input
 sleep 1
-echo "[AutoConfig] Auto-respawn enabled in lobby"
-echo "[AutoConfig] BedWars arenas use 5s respawn from BedWars config"
+echo "[AutoConfig] Lobby fully protected - no block break/place, no mobs, no weather"
+echo "[AutoConfig] WorldGuard __global__ region active - denies building for ALL players including OPs"

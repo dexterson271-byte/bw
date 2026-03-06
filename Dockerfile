@@ -73,8 +73,8 @@ RUN chmod +x entrypoint.sh backup.sh setup-permissions.sh
 # Expose Minecraft + FileBrowser ports
 EXPOSE ${SERVER_PORT} ${FILEBROWSER_PORT}
 
-# Volume for persistent data (backups, worlds, configs)
-VOLUME ["/data"]
+# Railway volumes are configured in the dashboard (mount path: /data)
+# Do NOT use VOLUME directive — Railway handles persistence via its own volume system
 
 # Health check with generous startup time for Railway
 HEALTHCHECK --interval=30s --timeout=10s --start-period=180s --retries=5 \

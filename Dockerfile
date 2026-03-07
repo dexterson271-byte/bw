@@ -75,18 +75,9 @@ RUN VAULT_URL=$(curl -s "https://api.github.com/repos/MilkBowl/Vault/releases/la
     curl -L -o plugins/Vault.jar "$VAULT_URL" && \
     echo "Vault downloaded"
 
-# ViaVersion + ViaBackwards + ViaRewind - allow 1.8.x to 1.20.x clients to join
-RUN VIA_URL=$(curl -s "https://api.github.com/repos/ViaVersion/ViaVersion/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    curl -L -o plugins/ViaVersion.jar "$VIA_URL" && \
-    echo "ViaVersion downloaded"
-
-RUN VIAB_URL=$(curl -s "https://api.github.com/repos/ViaVersion/ViaBackwards/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    curl -L -o plugins/ViaBackwards.jar "$VIAB_URL" && \
-    echo "ViaBackwards downloaded"
-
-RUN VIAR_URL=$(curl -s "https://api.github.com/repos/ViaVersion/ViaRewind/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    curl -L -o plugins/ViaRewind.jar "$VIAR_URL" && \
-    echo "ViaRewind downloaded"
+# ViaVersion + ViaBackwards + ViaRewind - pre-built JARs in plugins/ folder
+# Citizens, BedWars1058, Multiverse-Core, OldCombatMechanics - pre-built JARs in plugins/ folder
+# WorldGuard, VaultChatFormatter, ChatFormatter - pre-built JARs in plugins/ folder
 
 # SkinsRestorer - show skins in offline-mode server
 RUN SR_URL=$(curl -s "https://api.github.com/repos/SkinsRestorer/SkinsRestorer/releases/latest" | jq -r '.assets[] | select(.name == "SkinsRestorer.jar") | .browser_download_url') && \
@@ -102,14 +93,7 @@ RUN TAB_URL=$(curl -s "https://api.github.com/repos/NEZNAMY/TAB/releases/latest"
     curl -L -o plugins/TAB.jar "$TAB_URL" && \
     echo "TAB downloaded"
 
-# spark - performance profiler and TPS monitor
-RUN SPARK_URL=$(curl -s "https://api.github.com/repos/lucko/spark/releases/latest" | jq -r '.assets[] | select(.name | test("bukkit|paper";"i")) | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    if [ -n "$SPARK_URL" ] && [ "$SPARK_URL" != "null" ]; then \
-        curl -L -o plugins/spark.jar "$SPARK_URL"; \
-    else \
-        curl -L -o plugins/spark.jar "https://ci.lucko.me/job/spark/lastSuccessfulBuild/artifact/spark-bukkit/build/libs/spark-bukkit.jar"; \
-    fi && \
-    echo "spark downloaded"
+# spark - bundled with Purpur 1.20.6, no separate download needed
 
 # FastAsyncWorldEdit (FAWE) - required by WorldGuard
 RUN FAWE_URL=$(curl -s "https://api.github.com/repos/IntellectualSites/FastAsyncWorldEdit/releases/latest" | jq -r '.assets[] | select(.name | test("Bukkit")) | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
@@ -120,26 +104,7 @@ RUN FAWE_URL=$(curl -s "https://api.github.com/repos/IntellectualSites/FastAsync
     fi && \
     echo "FAWE downloaded"
 
-# WorldGuard - lobby protection (block-break/place deny)
-RUN WG_URL=$(curl -s "https://api.github.com/repos/EngineHub/WorldGuard/releases/latest" | jq -r '.assets[] | select(.name | test("bukkit";"i")) | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    if [ -n "$WG_URL" ] && [ "$WG_URL" != "null" ]; then \
-        curl -L -o plugins/WorldGuard.jar "$WG_URL"; \
-    else \
-        curl -L -o plugins/WorldGuard.jar "https://dev.bukkit.org/projects/worldguard/files/latest"; \
-    fi && \
-    echo "WorldGuard downloaded"
-
-# VaultChatFormatter - chat formatting with rank prefixes from LuckPerms/Vault
-RUN VCF_URL=$(curl -s "https://api.github.com/repos/Vankka/VaultChatFormatter/releases/latest" | jq -r '.assets[]? | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    if [ -n "$VCF_URL" ] && [ "$VCF_URL" != "null" ]; then \
-        curl -L -o plugins/VaultChatFormatter.jar "$VCF_URL"; \
-    else \
-        curl -L -o plugins/VaultChatFormatter.jar "https://github.com/Vankka/VaultChatFormatter/releases/download/v1.0.1/VaultChatFormatter-1.0.1.jar"; \
-    fi && \
-    echo "VaultChatFormatter downloaded"
-
-# Citizens - NPC plugin for BedWars1058 join NPCs (pre-built JAR in plugins/)
-# Citizens2 has no GitHub releases, so we include it as a pre-built JAR
+# WorldGuard, VaultChatFormatter, Citizens - all pre-built JARs in plugins/ folder
 
 # Validate all plugin JARs (remove corrupt/empty ones)
 RUN for jar in plugins/*.jar; do \

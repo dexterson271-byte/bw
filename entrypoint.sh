@@ -104,17 +104,21 @@ fi
 
 # Always update server.properties from image
 cp -f /server/server.properties "${SERVER_DIR}/server.properties" 2>/dev/null || true
+cp -f /server/bukkit.yml "${SERVER_DIR}/bukkit.yml" 2>/dev/null || true
+cp -f /server/spigot.yml "${SERVER_DIR}/spigot.yml" 2>/dev/null || true
 
-# Copy lobby world - only on first run, preserve in-game changes on restarts
+# Enforce single-lobby world mode on every boot
+sed -i 's/^allow-nether=.*/allow-nether=false/' "${SERVER_DIR}/server.properties" 2>/dev/null || true
+sed -i 's/^level-name=.*/level-name=world/' "${SERVER_DIR}/server.properties" 2>/dev/null || true
+sed -i 's/^  allow-end:.*/  allow-end: false/' "${SERVER_DIR}/bukkit.yml" 2>/dev/null || true
+
+# Copy lobby world from image on every boot to avoid stale/generated chunks
 if [ -d /server/world ]; then
+    rm -rf "${SERVER_DIR}/world" "${SERVER_DIR}/world_nether" "${SERVER_DIR}/world_the_end" 2>/dev/null || true
     mkdir -p "${SERVER_DIR}/world"
-    if [ ! -f "${SERVER_DIR}/world/level.dat" ]; then
-        echo "[Init] First run - copying full lobby world..."
-        cp -r /server/world/* "${SERVER_DIR}/world/" 2>/dev/null || true
-    else
-        echo "[Init] Lobby world already exists - preserving in-game changes"
-    fi
-    echo "[Init] Lobby world synced"
+    cp -r /server/world/* "${SERVER_DIR}/world/" 2>/dev/null || true
+    rm -f "${SERVER_DIR}/world/paper-world"*.yml 2>/dev/null || true
+    echo "[Init] Lobby world reset from image (nether/end removed)"
 fi
 
 # Copy arena maps (each map = separate world folder)

@@ -81,3 +81,25 @@ echo "difficulty peaceful" > /data/server/server_input
 sleep 1
 echo "[AutoConfig] Lobby fully protected - adventure mode, no mobs, no weather"
 echo "[AutoConfig] WorldGuard __global__ region active - denies building for ALL players including OPs"
+
+# Diagnostic: Check BedWars1058 plugin status
+sleep 5
+echo "[Diagnostic] Checking plugin load status..."
+if [ -f "/data/server/logs/latest.log" ]; then
+    # Check for BedWars1058 issues
+    BW_LINES=$(grep -i "bedwars1058\|bedwars.*disabl\|bedwars.*enabl\|NoClassDef.*bedwars\|version.*support.*bedwars" /data/server/logs/latest.log 2>/dev/null | tail -20)
+    if echo "$BW_LINES" | grep -qi "disabl"; then
+        echo "[Diagnostic] WARNING: BedWars1058 was disabled!"
+        echo "[Diagnostic] BedWars1058 log entries:"
+        echo "$BW_LINES"
+        # Also check for NMS/version errors
+        echo "[Diagnostic] NMS/version related errors:"
+        grep -i "NMS\|version.*support\|ClassNotFound\|NoClassDef\|UnsupportedClass\|cannot.*load\|failed.*instantiate" /data/server/logs/latest.log 2>/dev/null | grep -iv "worldguard\|via\|fawe\|worldedit" | tail -10
+    else
+        echo "[Diagnostic] BedWars1058 appears to be running"
+    fi
+    # Check WorldGuard
+    if grep -qi "worldguard.*unsupported\|worldguard.*could not load" /data/server/logs/latest.log 2>/dev/null; then
+        echo "[Diagnostic] WARNING: WorldGuard failed to load"
+    fi
+fi

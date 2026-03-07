@@ -71,6 +71,16 @@ else
     cp -rn /server/plugins/*/ "${SERVER_DIR}/plugins/" 2>/dev/null || true
 fi
 
+# Clear Paper's plugin remapping cache (force fresh remap after version/jar changes)
+rm -rf "${SERVER_DIR}/plugins/.paper-remapped" 2>/dev/null || true
+echo "[Init] Paper plugin remap cache cleared"
+
+# Reset BedWars1058 runtime data to troubleshoot silent disable on 1.20.6
+# Keeps only the base config from image; arenas will need re-setup after this works
+rm -rf "${SERVER_DIR}/plugins/BedWars1058" 2>/dev/null || true
+cp -rf /server/plugins/BedWars1058 "${SERVER_DIR}/plugins/" 2>/dev/null || true
+echo "[Init] BedWars1058 data reset (fresh config from image)"
+
 # Ensure BedWars1058 uses MULTIARENA mode (not BUNGEE)
 if [ -f "${SERVER_DIR}/plugins/BedWars1058/config.yml" ]; then
     sed -i 's/^serverType:.*/serverType: MULTIARENA/' "${SERVER_DIR}/plugins/BedWars1058/config.yml"

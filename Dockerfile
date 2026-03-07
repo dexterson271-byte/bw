@@ -24,7 +24,7 @@ RUN apk add --no-cache curl bash jq tar gzip unzip && \
     curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
 
 # Railway Pro: 8GB RAM, use 6G for Java (leave room for FileBrowser + OS)
-ENV MINECRAFT_VERSION=1.20.6
+ENV MINECRAFT_VERSION=1.20.4
 ENV SERVER_PORT=25565
 ENV MEMORY=6G
 ENV MAX_MEMORY=6G

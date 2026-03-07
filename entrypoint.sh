@@ -28,6 +28,8 @@ rm -rf "${SERVER_DIR}/plugins/BedWars" 2>/dev/null || true
 # Remove BedWarsProxy (incompatible with MULTIARENA mode)
 rm -f "${SERVER_DIR}/plugins/BedWarsProxy.jar" 2>/dev/null || true
 rm -rf "${SERVER_DIR}/plugins/BedWarsProxy" 2>/dev/null || true
+# Remove old Citizens.jar from volume (replaced by Citizens-2.0.33-b3311.jar)
+rm -f "${SERVER_DIR}/plugins/Citizens.jar" 2>/dev/null || true
 
 # Always force-update server.jar from image (ensures version upgrades take effect)
 cp -f /server/server.jar "${SERVER_DIR}/server.jar" 2>/dev/null || true

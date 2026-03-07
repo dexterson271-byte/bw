@@ -32,6 +32,9 @@ rm -rf "${SERVER_DIR}/plugins/BedWarsProxy" 2>/dev/null || true
 rm -f "${SERVER_DIR}/plugins/Citizens"*.jar 2>/dev/null || true
 # Remove stale FAWE from volume (we use standard WorldEdit now)
 rm -f "${SERVER_DIR}/plugins/FastAsyncWorldEdit.jar" 2>/dev/null || true
+# Remove TAB plugin from volume (intentionally disabled)
+rm -f "${SERVER_DIR}/plugins/TAB.jar" 2>/dev/null || true
+rm -rf "${SERVER_DIR}/plugins/TAB" 2>/dev/null || true
 
 # Always force-update server.jar from image (ensures version upgrades take effect)
 cp -f /server/server.jar "${SERVER_DIR}/server.jar" 2>/dev/null || true
@@ -67,12 +70,14 @@ else
     # Force update all plugins from image
     echo "[Init] Updating plugins from image..."
     cp -f /server/plugins/*.jar "${SERVER_DIR}/plugins/" 2>/dev/null || true
-    # Force update plugin configs (WorldGuard regions, TAB, etc.)
+    # Force update plugin configs
     cp -rf /server/plugins/WorldGuard "${SERVER_DIR}/plugins/" 2>/dev/null || true
-    cp -rf /server/plugins/TAB "${SERVER_DIR}/plugins/" 2>/dev/null || true
     cp -rf /server/plugins/VaultChatFormatter "${SERVER_DIR}/plugins/" 2>/dev/null || true
     cp -rf /server/plugins/BedWars1058 "${SERVER_DIR}/plugins/" 2>/dev/null || true
     cp -rn /server/plugins/*/ "${SERVER_DIR}/plugins/" 2>/dev/null || true
+    # Re-enforce TAB removal in case stale data exists on volume.
+    rm -f "${SERVER_DIR}/plugins/TAB.jar" 2>/dev/null || true
+    rm -rf "${SERVER_DIR}/plugins/TAB" 2>/dev/null || true
 fi
 
 # Clear Paper's plugin remapping cache (force fresh remap after version/jar changes)

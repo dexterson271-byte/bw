@@ -40,81 +40,10 @@ RUN PURPUR_URL="https://api.purpurmc.org/v2/purpur/${MINECRAFT_VERSION}/latest/d
 # Create plugins directory
 RUN mkdir -p plugins
 
-# ProtocolLib - required by FastLogin
-RUN PROTO_URL=$(curl -s "https://api.github.com/repos/dmulloy2/ProtocolLib/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url') && \
-    curl -L -o plugins/ProtocolLib.jar "$PROTO_URL" && \
-    echo "ProtocolLib downloaded"
-
-# AuthMe - login/register for cracked players
-RUN AUTH_URL=$(curl -s "https://api.github.com/repos/AuthMe/AuthMeReloaded/releases/latest" | jq -r '[.assets[] | select(.name | endswith(".jar")) | select(.name | test("source|javadoc";"i") | not)][0].browser_download_url') && \
-    if [ -n "$AUTH_URL" ] && [ "$AUTH_URL" != "null" ]; then \
-        curl -L -o plugins/AuthMe.jar "$AUTH_URL"; \
-    else \
-        AUTH_URL=$(curl -s "https://api.github.com/repos/AuthMe/AuthMeReloaded/releases/latest" | jq -r '.assets[0].browser_download_url') && \
-        curl -L -o plugins/AuthMe.jar "$AUTH_URL"; \
-    fi && \
-    echo "AuthMe downloaded"
-
-# FastLogin - auto-login for premium players (TuxCoding fork)
-RUN FAST_URL=$(curl -s "https://api.github.com/repos/TuxCoding/FastLogin/releases/latest" | jq -r '.assets[] | select(.name == "FastLoginBukkit.jar") | .browser_download_url') && \
-    if [ -n "$FAST_URL" ] && [ "$FAST_URL" != "null" ]; then \
-        curl -L -o plugins/FastLogin.jar "$FAST_URL"; \
-    else \
-        curl -L -o plugins/FastLogin.jar "https://github.com/TuxCoding/FastLogin/releases/download/1.12-kick-toggle/FastLoginBukkit.jar"; \
-    fi && \
-    echo "FastLogin downloaded"
-
-# LuckPerms - permissions (owner/admin/vip ranks with tags)
-RUN curl -L -o plugins/LuckPerms.jar \
-    "https://download.luckperms.net/1624/bukkit/loader/LuckPerms-Bukkit-5.5.36.jar" && \
-    ls -la plugins/LuckPerms.jar && \
-    echo "LuckPerms downloaded"
-
-# Vault - economy/permissions API bridge
-RUN VAULT_URL=$(curl -s "https://api.github.com/repos/MilkBowl/Vault/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url') && \
-    curl -L -o plugins/Vault.jar "$VAULT_URL" && \
-    echo "Vault downloaded"
-
-# ViaVersion + ViaBackwards + ViaRewind - pre-built JARs in plugins/ folder
-# Citizens, BedWars1058, Multiverse-Core, OldCombatMechanics - pre-built JARs in plugins/ folder
-# WorldGuard, VaultChatFormatter, ChatFormatter - pre-built JARs in plugins/ folder
-
-# SkinsRestorer - show skins in offline-mode server
-RUN SR_URL=$(curl -s "https://api.github.com/repos/SkinsRestorer/SkinsRestorer/releases/latest" | jq -r '.assets[] | select(.name == "SkinsRestorer.jar") | .browser_download_url') && \
-    if [ -n "$SR_URL" ] && [ "$SR_URL" != "null" ]; then \
-        curl -L -o plugins/SkinsRestorer.jar "$SR_URL"; \
-    else \
-        curl -L -o plugins/SkinsRestorer.jar "https://github.com/SkinsRestorer/SkinsRestorer/releases/latest/download/SkinsRestorer.jar"; \
-    fi && \
-    echo "SkinsRestorer downloaded"
-
-# TAB - tab list formatting with rank prefixes and nametags
-RUN TAB_URL=$(curl -s "https://api.github.com/repos/NEZNAMY/TAB/releases/latest" | jq -r '.assets[] | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    curl -L -o plugins/TAB.jar "$TAB_URL" && \
-    echo "TAB downloaded"
-
-# spark - bundled with Purpur 1.20.6, no separate download needed
-
-# FastAsyncWorldEdit (FAWE) - required by WorldGuard
-RUN FAWE_URL=$(curl -s "https://api.github.com/repos/IntellectualSites/FastAsyncWorldEdit/releases/latest" | jq -r '.assets[] | select(.name | test("Bukkit")) | select(.name | endswith(".jar")) | .browser_download_url' | head -1) && \
-    if [ -n "$FAWE_URL" ] && [ "$FAWE_URL" != "null" ]; then \
-        curl -L -o plugins/FastAsyncWorldEdit.jar "$FAWE_URL"; \
-    else \
-        curl -L -o plugins/FastAsyncWorldEdit.jar "https://ci.athion.net/job/FastAsyncWorldEdit/lastSuccessfulBuild/artifact/artifacts/FastAsyncWorldEdit-Bukkit.jar"; \
-    fi && \
-    echo "FAWE downloaded"
-
-# WorldGuard, VaultChatFormatter, Citizens - all pre-built JARs in plugins/ folder
+# All plugins are pre-built JARs in the plugins/ folder (copied via COPY below)
+# This avoids GitHub API rate limiting which previously caused corrupt downloads
 
 # Validate all plugin JARs (remove corrupt/empty ones)
-RUN for jar in plugins/*.jar; do \
-        if [ ! -s "$jar" ]; then \
-            echo "WARNING: Empty JAR detected, removing: $jar" && rm -f "$jar"; \
-        elif ! unzip -tq "$jar" > /dev/null 2>&1; then \
-            echo "WARNING: Corrupt JAR detected, removing: $jar" && rm -f "$jar"; \
-        fi; \
-    done && echo "All plugin JARs validated"
-
 RUN echo "eula=true" > eula.txt
 
 # Copy all configs

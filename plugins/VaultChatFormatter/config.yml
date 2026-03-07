@@ -1,5 +1,0 @@
-# VaultChatFormatter Configuration
-# Reads prefix/suffix from Vault (which gets it from LuckPerms)
-# Placeholders: {vault_prefix}, {vault_suffix}, {displayname}, {username}, {message}, {world}
-
-format: '{vault_prefix}{displayname}&r: {message}'

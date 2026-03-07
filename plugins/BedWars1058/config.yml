@@ -1,8 +1,0 @@
-# BedWars1058 by andrei1058
-# Server type: MULTIARENA (single server with lobby + arenas)
-# Options: MULTIARENA, BUNGEE, BUNGEE_LEGACY
-serverType: MULTIARENA
-language: en
-storeLink: https://www.spigotmc.org/resources/authors/39904/
-lobbyServer: hub
-debug: false

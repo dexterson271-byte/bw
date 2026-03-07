@@ -185,12 +185,29 @@ echo "[PermSetup] Scheduling permission setup..."
 PERM_PID=$!
 echo "[PermSetup] Scheduled (PID: ${PERM_PID})"
 
+# --- Graceful Shutdown Handler ---
+# When Railway sends SIGTERM (redeploy/restart), tell the MC server to stop
+# so all plugins (Citizens NPCs, etc.) save their data before exiting
+graceful_shutdown() {
+    echo "[Server] Received shutdown signal, stopping server gracefully..."
+    echo "stop" > "$SERVER_INPUT"
+    # Wait up to 25 seconds for the server to save and exit
+    local count=0
+    while kill -0 $SERVER_PID 2>/dev/null && [ $count -lt 25 ]; do
+        sleep 1
+        count=$((count + 1))
+    done
+    echo "[Server] Cleanup complete, exiting"
+    kill $FILEBROWSER_PID $BACKUP_PID 2>/dev/null || true
+    exit 0
+}
+
 # --- Start Minecraft Server ---
 cd "${SERVER_DIR}"
 echo "[Server] Starting BedWars server with ${MEMORY} RAM..."
 
-# Use tail to keep the pipe open, feed both pipe and stdin to the server
-tail -f "$SERVER_INPUT" | java \
+# Start tail feeder + Java server as a pipeline in background
+(tail -f "$SERVER_INPUT" | java \
     -Xms${MEMORY} \
     -Xmx${MAX_MEMORY} \
     -XX:+UseG1GC \
@@ -225,4 +242,10 @@ tail -f "$SERVER_INPUT" | java \
     -Dio.netty.selectorAutoRebuildThreshold=0 \
     -jar server.jar \
     --nogui \
-    --port ${SERVER_PORT}
+    --port ${SERVER_PORT}) &
+SERVER_PID=$!
+
+trap graceful_shutdown SIGTERM SIGINT
+
+echo "[Server] PID: ${SERVER_PID}, waiting for exit..."
+wait $SERVER_PID

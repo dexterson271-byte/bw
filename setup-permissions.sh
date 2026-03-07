@@ -77,9 +77,17 @@ echo "gamerule announceAdvancements false" > /data/server/server_input
 sleep 0.5
 echo "gamerule spawnRadius 0" > /data/server/server_input
 sleep 0.5
+echo "gamerule spectatorsGenerateChunks false" > /data/server/server_input
+sleep 0.5
+echo "worldborder center 0 0" > /data/server/server_input
+sleep 0.5
+echo "worldborder set 256" > /data/server/server_input
+sleep 0.5
+echo "worldborder warning distance 0" > /data/server/server_input
+sleep 0.5
 echo "difficulty peaceful" > /data/server/server_input
 sleep 1
-echo "[AutoConfig] Lobby fully protected - adventure mode, no mobs, no weather"
+echo "[AutoConfig] Lobby fully protected - adventure mode, no mobs, no weather, worldborder active"
 echo "[AutoConfig] WorldGuard region automation skipped (plugin currently disabled)"
 
 # Diagnostic: Check BedWars1058 plugin status

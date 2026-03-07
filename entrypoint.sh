@@ -136,6 +136,32 @@ if [ -d /server/world ]; then
     fi
 fi
 
+# Disable accidentally imported worlds on the volume (e.g. /mv import).
+# Keep only lobby world and configured BedWars arena worlds.
+ALLOWED_WORLDS=" world "
+if [ -d /server/maps/arenas ]; then
+    for MAP_DIR in /server/maps/arenas/*/; do
+        [ -d "$MAP_DIR" ] || continue
+        ALLOWED_WORLDS="${ALLOWED_WORLDS}$(basename "$MAP_DIR") "
+    done
+fi
+TS=$(date +%Y%m%d-%H%M%S)
+DISABLED_WORLDS_DIR="${BACKUP_DIR}/disabled-worlds-${TS}"
+for CANDIDATE in "${SERVER_DIR}"/*; do
+    [ -d "$CANDIDATE" ] || continue
+    WORLD_NAME=$(basename "$CANDIDATE")
+    if [ -f "$CANDIDATE/level.dat" ]; then
+        case " ${ALLOWED_WORLDS} " in
+            *" ${WORLD_NAME} "*) ;;
+            *)
+                mkdir -p "$DISABLED_WORLDS_DIR"
+                mv "$CANDIDATE" "$DISABLED_WORLDS_DIR/" 2>/dev/null || true
+                echo "[Init] Disabled unexpected world: ${WORLD_NAME}"
+                ;;
+        esac
+    fi
+done
+
 # Reset Multiverse world registry on boot so only the lobby world is auto-loaded.
 # This prevents stale imports (e.g. older/newer-version maps) from forcing chunk loads at startup.
 MV_WORLD_FILE="${SERVER_DIR}/plugins/Multiverse-Core/worlds.yml"

@@ -30,6 +30,8 @@ rm -f "${SERVER_DIR}/plugins/BedWarsProxy.jar" 2>/dev/null || true
 rm -rf "${SERVER_DIR}/plugins/BedWarsProxy" 2>/dev/null || true
 # Remove all Citizens JARs from volume (Citizens crashes the server on 1.20.4)
 rm -f "${SERVER_DIR}/plugins/Citizens"*.jar 2>/dev/null || true
+# Remove stale FAWE from volume (we use standard WorldEdit now)
+rm -f "${SERVER_DIR}/plugins/FastAsyncWorldEdit.jar" 2>/dev/null || true
 
 # Always force-update server.jar from image (ensures version upgrades take effect)
 cp -f /server/server.jar "${SERVER_DIR}/server.jar" 2>/dev/null || true
@@ -77,11 +79,11 @@ fi
 rm -rf "${SERVER_DIR}/plugins/.paper-remapped" 2>/dev/null || true
 echo "[Init] Paper plugin remap cache cleared"
 
-# Reset BedWars1058 runtime data to troubleshoot silent disable on 1.20.6
-# Keeps only the base config from image; arenas will need re-setup after this works
-rm -rf "${SERVER_DIR}/plugins/BedWars1058" 2>/dev/null || true
-cp -rf /server/plugins/BedWars1058 "${SERVER_DIR}/plugins/" 2>/dev/null || true
-echo "[Init] BedWars1058 data reset (fresh config from image)"
+# Keep BedWars1058 runtime data on volume to preserve lobby/arena config.
+if [ ! -d "${SERVER_DIR}/plugins/BedWars1058" ] && [ -d /server/plugins/BedWars1058 ]; then
+    cp -rf /server/plugins/BedWars1058 "${SERVER_DIR}/plugins/" 2>/dev/null || true
+    echo "[Init] BedWars1058 base data copied (first run only)"
+fi
 
 # Ensure BedWars1058 uses MULTIARENA mode (not BUNGEE)
 if [ -f "${SERVER_DIR}/plugins/BedWars1058/config.yml" ]; then
@@ -112,13 +114,26 @@ sed -i 's/^allow-nether=.*/allow-nether=false/' "${SERVER_DIR}/server.properties
 sed -i 's/^level-name=.*/level-name=world/' "${SERVER_DIR}/server.properties" 2>/dev/null || true
 sed -i 's/^  allow-end:.*/  allow-end: false/' "${SERVER_DIR}/bukkit.yml" 2>/dev/null || true
 
-# Copy lobby world from image on every boot to avoid stale/generated chunks
+# One-time safe migration to lobby template with backup.
+# Afterwards preserve lobby world and only remove nether/end folders.
 if [ -d /server/world ]; then
-    rm -rf "${SERVER_DIR}/world" "${SERVER_DIR}/world_nether" "${SERVER_DIR}/world_the_end" 2>/dev/null || true
-    mkdir -p "${SERVER_DIR}/world"
-    cp -r /server/world/* "${SERVER_DIR}/world/" 2>/dev/null || true
-    rm -f "${SERVER_DIR}/world/paper-world"*.yml 2>/dev/null || true
-    echo "[Init] Lobby world reset from image (nether/end removed)"
+    LOBBY_MIGRATION_FLAG="${SERVER_DIR}/.lobby_world_migrated"
+    if [ ! -f "${LOBBY_MIGRATION_FLAG}" ]; then
+        TS=$(date +%Y%m%d-%H%M%S)
+        mkdir -p "${BACKUP_DIR}/world-migration-${TS}"
+        cp -r "${SERVER_DIR}/world" "${BACKUP_DIR}/world-migration-${TS}/" 2>/dev/null || true
+        cp -r "${SERVER_DIR}/world_nether" "${BACKUP_DIR}/world-migration-${TS}/" 2>/dev/null || true
+        cp -r "${SERVER_DIR}/world_the_end" "${BACKUP_DIR}/world-migration-${TS}/" 2>/dev/null || true
+        rm -rf "${SERVER_DIR}/world" "${SERVER_DIR}/world_nether" "${SERVER_DIR}/world_the_end" 2>/dev/null || true
+        mkdir -p "${SERVER_DIR}/world"
+        cp -r /server/world/* "${SERVER_DIR}/world/" 2>/dev/null || true
+        rm -f "${SERVER_DIR}/world/paper-world"*.yml 2>/dev/null || true
+        touch "${LOBBY_MIGRATION_FLAG}"
+        echo "[Init] Lobby world migrated from image with backup: world-migration-${TS}"
+    else
+        rm -rf "${SERVER_DIR}/world_nether" "${SERVER_DIR}/world_the_end" 2>/dev/null || true
+        echo "[Init] Lobby world preserved (nether/end removed)"
+    fi
 fi
 
 # Copy arena maps (each map = separate world folder)

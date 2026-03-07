@@ -80,7 +80,7 @@ sleep 0.5
 echo "difficulty peaceful" > /data/server/server_input
 sleep 1
 echo "[AutoConfig] Lobby fully protected - adventure mode, no mobs, no weather"
-echo "[AutoConfig] WorldGuard __global__ region active - denies building for ALL players including OPs"
+echo "[AutoConfig] WorldGuard region automation skipped (plugin currently disabled)"
 
 # Diagnostic: Check BedWars1058 plugin status
 sleep 5

@@ -136,6 +136,16 @@ if [ -d /server/world ]; then
     fi
 fi
 
+# Reset Multiverse world registry on boot so only the lobby world is auto-loaded.
+# This prevents stale imports (e.g. older/newer-version maps) from forcing chunk loads at startup.
+MV_WORLD_FILE="${SERVER_DIR}/plugins/Multiverse-Core/worlds.yml"
+if [ -f "${MV_WORLD_FILE}" ]; then
+    TS=$(date +%Y%m%d-%H%M%S)
+    cp "${MV_WORLD_FILE}" "${BACKUP_DIR}/multiverse-worlds-${TS}.yml" 2>/dev/null || true
+    rm -f "${MV_WORLD_FILE}" 2>/dev/null || true
+    echo "[Init] Multiverse worlds.yml reset (backup: multiverse-worlds-${TS}.yml)"
+fi
+
 # Copy arena maps (each map = separate world folder)
 # BedWars1058 requires lowercase folder names
 if [ -d /server/maps/arenas ]; then

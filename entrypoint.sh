@@ -269,6 +269,7 @@ cd "${SERVER_DIR}"
 echo "[Server] Starting BedWars server with ${MEMORY} RAM..."
 
 # Start tail feeder + Java server as a pipeline in background
+# Using PvP-optimized JVM flags for smooth combat with minimal GC lag spikes
 (tail -f "$SERVER_INPUT" | java \
     -Xms${MEMORY} \
     -Xmx${MAX_MEMORY} \
@@ -276,32 +277,19 @@ echo "[Server] Starting BedWars server with ${MEMORY} RAM..."
     -XX:+ParallelRefProcEnabled \
     -XX:MaxGCPauseMillis=200 \
     -XX:+UnlockExperimentalVMOptions \
-    -XX:+UnlockDiagnosticVMOptions \
     -XX:+DisableExplicitGC \
     -XX:+AlwaysPreTouch \
-    -XX:G1NewSizePercent=40 \
-    -XX:G1MaxNewSizePercent=50 \
-    -XX:G1HeapRegionSize=16M \
-    -XX:G1ReservePercent=15 \
+    -XX:G1NewSizePercent=30 \
+    -XX:G1MaxNewSizePercent=40 \
+    -XX:G1HeapRegionSize=8M \
+    -XX:G1ReservePercent=20 \
     -XX:G1HeapWastePercent=5 \
     -XX:G1MixedGCCountTarget=4 \
-    -XX:InitiatingHeapOccupancyPercent=20 \
-    -XX:G1MixedGCLiveThresholdPercent=90 \
-    -XX:G1RSetUpdatingPauseTimePercent=5 \
-    -XX:SurvivorRatio=32 \
+    -XX:InitiatingHeapOccupancyPercent=15 \
     -XX:+PerfDisableSharedMem \
     -XX:MaxTenuringThreshold=1 \
-    -XX:+UseCompressedOops \
-    -XX:+OptimizeStringConcat \
-    -XX:+UseStringDeduplication \
-    -XX:+UseNUMA \
-    -XX:+ExitOnOutOfMemoryError \
-    -Dusing.aikars.flags=https://mcflags.emc.gs \
-    -Daikars.new.flags=true \
     -Dpaper.playerconnection.keepalive=120 \
-    -Dpaper.maxCustomChannelName=64 \
     -Dio.netty.allocator.maxOrder=9 \
-    -Dio.netty.selectorAutoRebuildThreshold=0 \
     -jar server.jar \
     --nogui \
     --port ${SERVER_PORT}) &
